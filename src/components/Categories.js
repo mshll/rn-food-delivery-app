@@ -14,21 +14,13 @@ const Categories = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={categories}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            <Text style={styles.headerText}>Categories</Text>
-            <Text style={styles.headerSubText}>{categories.length}</Text>
-          </View>
-        }
-        stickyHeaderIndices={[0]}
-      />
-    </SafeAreaView>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Cuisines</Text>
+        <Text style={styles.headerSubText}>{categories.length}</Text>
+      </View>
+      <FlatList data={categories} renderItem={renderItem} keyExtractor={(item) => item.id} horizontal={true} stickyHeaderIndices={[0]} />
+    </View>
   );
 };
 
@@ -36,14 +28,17 @@ export default Categories;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // backgroundColor: 'red',
+    // flex: 1,
+    backgroundColor: '#d3e8d6',
     justifyContent: 'center',
     alignSelf: 'stretch',
     color: '#fff',
+    borderEndEndRadius: 25,
+    borderEndStartRadius: 25,
+    paddingBottom: 10,
   },
   header: {
-    backgroundColor: '#1b1d21',
+    backgroundColor: '#d3e8d6',
     color: '#d3e8d6',
     flexDirection: 'row',
     justifyContent: 'flex-start',
@@ -51,39 +46,39 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   headerText: {
-    backgroundColor: '#1b1d21',
-    color: '#d3e8d6',
+    color: '#1b1d21',
     fontSize: 34,
     fontWeight: 'bold',
   },
   item: {
-    flex: 1,
-    margin: 10,
+    // marginHorizontal: 10,
+    margin: 5,
     alignItems: 'center',
     // backgroundColor: '#222429',
-    padding: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
     borderRadius: 10,
-    gap: 10,
+    gap: 5,
   },
   text: {
-    color: '#d3e8d6',
-    fontSize: 20,
+    color: '#222429',
+    fontSize: 16,
     fontWeight: '500',
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 50,
+    height: 50,
     // borderRadius: 100,
   },
   headerSubText: {
-    backgroundColor: '#f7ffae',
-    color: '#1b1d21',
+    backgroundColor: '#1b1d21',
+    color: '#d3e8d6',
     fontSize: 34,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 1,
     fontWeight: 'bold',
     fontSize: 24,
-    borderRadius: 10,
+    borderRadius: 12,
     marginLeft: 10,
   },
 });
