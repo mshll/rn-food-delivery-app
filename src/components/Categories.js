@@ -8,7 +8,7 @@ const Categories = () => {
 
   const renderItem = ({ item }) => (
     <View style={styles.item}>
-      <Image source={categoryBetterImages[item.categoryName]} style={styles.image} />
+      <Image source={categoryBetterImages[item.categoryName] || { uri: item.categoryImage }} style={styles.image} />
       <Text style={styles.text}>{item.categoryName}</Text>
     </View>
   );
@@ -19,7 +19,15 @@ const Categories = () => {
         <Text style={styles.headerText}>Cuisines</Text>
         <Text style={styles.headerSubText}>{categories.length}</Text>
       </View>
-      <FlatList data={categories} renderItem={renderItem} keyExtractor={(item) => item.id} horizontal={true} stickyHeaderIndices={[0]} />
+      <FlatList
+        data={categories}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        horizontal={true}
+        stickyHeaderIndices={[0]}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 16 }}
+      />
     </View>
   );
 };
@@ -28,13 +36,13 @@ export default Categories;
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex: 0,
     backgroundColor: '#d3e8d6',
     justifyContent: 'center',
     alignSelf: 'stretch',
     color: '#fff',
-    borderEndEndRadius: 25,
-    borderEndStartRadius: 25,
+    borderEndEndRadius: 20,
+    borderEndStartRadius: 20,
     paddingBottom: 10,
   },
   header: {
@@ -43,7 +51,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: 16,
+    paddingTop: 5,
+    paddingBottom: 16,
+    paddingHorizontal: 16,
   },
   headerText: {
     color: '#1b1d21',

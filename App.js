@@ -4,16 +4,21 @@ import Categories from './src/components/Categories';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Restaurants from './src/components/Restaurants';
 import CustomStatusBar from './src/components/CustomStatusBar';
+import RestaurantMenu from './src/components/RestaurantMenu';
+import RestaurantDetail from './src/components/RestaurantDetail';
+import MenuItemDetail from './src/components/MenuItemDetail';
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
+      {/* <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
         <View style={styles.container}>
           <Categories />
-          <Restaurants />
-        </View>
-      </CustomStatusBar>
+          <RestaurantMenu />
+          </View>
+      </CustomStatusBar> */}
+      {/* <RestaurantDetail /> */}
+      <MenuItemDetail />
     </SafeAreaProvider>
   );
 }

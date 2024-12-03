@@ -3,39 +3,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { renderStars } from '../utils/utils';
+import Button from './Button';
 
-const Restaurants = () => {
+const RestaurantMenu = () => {
+  const restaurant = restaurants[0]; // TODO
+
   const renderItem = ({ item, index }) => (
     <View style={styles.item}>
       <Image source={{ uri: item.image }} style={styles.image} />
-      <View style={styles.cardDetails}>
-        <Text
-          style={{
-            backgroundColor: '#d3e8d6',
-            color: '#1b1d21',
-            paddingVertical: 4,
-            paddingHorizontal: 10,
-            borderRadius: 500,
-            fontSize: 10,
-            fontWeight: '600',
-          }}
-        >
-          {item.category}
-        </Text>
-        <Text style={styles.text}>{item.name}</Text>
-        {/* <View style={styles.cardSubDetails}> */}
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {renderStars(item.rating)}
-          <Text style={styles.subText}> {item.rating}</Text>
+      <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
+        <View style={styles.cardDetails}>
+          <Text style={styles.text}>{item.name}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text style={styles.subText}>{item.price} KWD</Text>
+          </View>
         </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Icon name="truck-fast" size={11} color="#7e878a" />
-          <Text style={[styles.subText, { color: '#7e878a' }]}>
-            {'  '}
-            {item.deliveryTime}
-          </Text>
-        </View>
-        {/* </View> */}
+        <Icon name="chevron-right" size={14} color="#7e878a" style={{ marginHorizontal: 10 }} />
       </View>
     </View>
   );
@@ -43,15 +26,14 @@ const Restaurants = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={restaurants}
+        data={restaurant.menuItems}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         numColumns={1}
-        // columnWrapperStyle={{ justifyContent: 'flex-start', flex: 1, margin: 10, gap: 10 }}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.headerText}>Restaurants</Text>
-            <Text style={styles.headerSubText}>{restaurants.length}</Text>
+            <Text style={styles.headerText}>Menu</Text>
+            <Text style={styles.headerSubText}>{restaurant.menuItems.length}</Text>
           </View>
         }
         stickyHeaderIndices={[0]}
@@ -62,7 +44,7 @@ const Restaurants = () => {
   );
 };
 
-export default Restaurants;
+export default RestaurantMenu;
 
 const styles = StyleSheet.create({
   container: {
@@ -97,6 +79,7 @@ const styles = StyleSheet.create({
     // gap: 10,
     borderColor: '#282a2f',
     borderWidth: 1,
+    position: 'relative',
   },
   text: {
     // backgroundColor: 'blue',
@@ -109,7 +92,7 @@ const styles = StyleSheet.create({
     width: 125,
     borderRadius: 10,
     backgroundColor: '#282a2f',
-    objectFit: 'contain',
+    objectFit: 'cover',
   },
   headerSubText: {
     backgroundColor: '#d3e8d6',
@@ -127,8 +110,6 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingBottom: 10,
     width: '100%',
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
@@ -144,7 +125,7 @@ const styles = StyleSheet.create({
   },
   subText: {
     color: '#f7ffae',
-    fontSize: 14,
+    fontSize: 20,
     fontWeight: '500',
   },
 });

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { SafeAreaView, StatusBar } from 'react-native';
 
-const CustomStatusBar = ({ children, statusBgColor = '#fff', barStyle = 'dark-content', bgColor = '#fff' }) => {
+const CustomStatusBar = ({ children, statusBgColor = '#fff', barStyle = 'default', bgColor = '#fff' }) => {
   return (
     <Fragment>
       <StatusBar backgroundColor={statusBgColor} barStyle={barStyle} />
