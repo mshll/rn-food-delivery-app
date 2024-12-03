@@ -1,12 +1,16 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { Fragment } from 'react';
-import { SafeAreaView, StatusBar } from 'react-native';
+import { StatusBar, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const CustomStatusBar = ({ children, statusBgColor = '#fff', barStyle = 'default', bgColor = '#fff' }) => {
+const CustomStatusBar = ({ children, statusBgColor = '#fff', barStyle = 'default', bgColor = '#fff', useTopPadding = false }) => {
+  const navigation = useNavigation();
+  const insets = useSafeAreaInsets();
   return (
     <Fragment>
       <StatusBar backgroundColor={statusBgColor} barStyle={barStyle} />
-      <SafeAreaView style={{ flex: 0, backgroundColor: statusBgColor }} />
-      <SafeAreaView style={{ flex: 1, backgroundColor: bgColor }}>{children}</SafeAreaView>
+      <View style={{ flex: 0, backgroundColor: statusBgColor, paddingTop: useTopPadding ? insets.top : 0 }} />
+      <View style={{ flex: 1, backgroundColor: bgColor, paddingBottom: insets.bottom }}>{children}</View>
     </Fragment>
   );
 };

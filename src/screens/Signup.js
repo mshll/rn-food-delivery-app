@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import CustomStatusBar from './CustomStatusBar';
-import Button from './Button';
+import CustomStatusBar from '../components/CustomStatusBar';
+import Button from '../components/Button';
 
-const Login = () => {
+const Signup = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -23,14 +23,14 @@ const Login = () => {
         />
         <View style={{ flex: 1 }} />
         <View style={{ width: '80%' }}>
-          <Button title="Login" bgColor="#f7ffae" color="#1b1d21" />
+          <Button title="Signup" bgColor="#f7ffae" color="#1b1d21" />
         </View>
       </View>
     </CustomStatusBar>
   );
 };
 
-export default Login;
+export default Signup;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,11 +1,12 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import RestaurantMenu from './RestaurantMenu';
-import CustomStatusBar from './CustomStatusBar';
-import MenuItemDetailHeader from './MenuItemDetailHeader';
+import RestaurantMenu from '../components/RestaurantMenu';
+import CustomStatusBar from '../components/CustomStatusBar';
+import MenuItemDetailHeader from '../components/MenuItemDetailHeader';
 import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useEffect, useState } from 'react';
-import Button from './Button';
+import Button from '../components/Button';
+import { useNavigation } from '@react-navigation/native';
 
 const MenuItemDetail = ({ route }) => {
   const { menuItem } = route.params;
@@ -24,8 +25,8 @@ const MenuItemDetail = ({ route }) => {
 
   return (
     <>
-      <MenuItemDetailHeader menuItem={menuItem} />
-      <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
+      <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21" useTopPadding={false}>
+        <MenuItemDetailHeader menuItem={menuItem} />
         <View style={styles.container}>
           <View style={{ justifyContent: 'space-between', flex: 1, width: '100%' }}>
             {/* top */}

@@ -1,10 +1,10 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import RestaurantMenu from './RestaurantMenu';
-import CustomStatusBar from './CustomStatusBar';
+import RestaurantMenu from '../components/RestaurantMenu';
+import CustomStatusBar from '../components/CustomStatusBar';
 import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useEffect, useState } from 'react';
-import Button from './Button';
+import Button from '../components/Button';
 
 const Cart = () => {
   const menuItem = restaurants[0].menuItems[0];

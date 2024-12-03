@@ -1,16 +1,17 @@
 import { StyleSheet, Text, View } from 'react-native';
-import RestaurantMenu from './RestaurantMenu';
-import RestaurantDetailHeader from './RestaurantDetailHeader';
-import CustomStatusBar from './CustomStatusBar';
 import { useNavigation } from '@react-navigation/native';
+import CustomStatusBar from '../components/CustomStatusBar';
+import RestaurantMenu from '../components/RestaurantMenu';
+import RestaurantDetailHeader from '../components/RestaurantDetailHeader';
+
 const RestaurantDetail = ({ route }) => {
   const navigation = useNavigation();
   const { restaurant } = route.params;
 
   return (
     <>
-      <RestaurantDetailHeader restaurant={restaurant} />
-      <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
+      <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21" useTopPadding={false}>
+        <RestaurantDetailHeader restaurant={restaurant} />
         <RestaurantMenu restaurant={restaurant} />
       </CustomStatusBar>
     </>
