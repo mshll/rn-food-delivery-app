@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'stretch',
     backgroundColor: '#1b1d21',
-    height: 400,
+    height: '50%',
   },
   image: {
     flex: 1,

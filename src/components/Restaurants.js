@@ -4,7 +4,9 @@ import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { renderStars } from '../utils/utils';
 
-const Restaurants = () => {
+const Restaurants = ({ selectedCategory }) => {
+  const filteredRestaurants = selectedCategory ? restaurants.filter((item) => item.category === selectedCategory) : restaurants;
+
   const renderItem = ({ item, index }) => (
     <View style={styles.item}>
       <Image source={{ uri: item.image }} style={styles.image} />
@@ -43,7 +45,7 @@ const Restaurants = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={restaurants}
+        data={filteredRestaurants}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         numColumns={1}
@@ -51,7 +53,7 @@ const Restaurants = () => {
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.headerText}>Restaurants</Text>
-            <Text style={styles.headerSubText}>{restaurants.length}</Text>
+            <Text style={styles.headerSubText}>{filteredRestaurants.length}</Text>
           </View>
         }
         stickyHeaderIndices={[0]}

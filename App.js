@@ -1,6 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Categories from './src/components/Categories';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Restaurants from './src/components/Restaurants';
 import CustomStatusBar from './src/components/CustomStatusBar';
@@ -10,30 +9,17 @@ import MenuItemDetail from './src/components/MenuItemDetail';
 import Cart from './src/components/Cart';
 import Login from './src/components/Login';
 import Signup from './src/components/Signup';
+import RestaurantsList from './src/components/RestaurantsList';
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      {/* <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
-        <View style={styles.container}>
-          <Categories />
-          <RestaurantMenu />
-          </View>
-      </CustomStatusBar> */}
+      <RestaurantsList />
       {/* <RestaurantDetail /> */}
       {/* <MenuItemDetail /> */}
       {/* <Cart /> */}
       {/* <Login /> */}
-      <Signup />
+      {/* <Signup /> */}
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#1b1d21',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

@@ -1,16 +1,18 @@
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, Pressable } from 'react-native';
 import restaurantCategories from '../data/categories';
 import categoryBetterImages from '../data/categoryBetterImages';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const Categories = () => {
+const Categories = ({ setSelectedCategory, selectedCategory }) => {
   const categories = restaurantCategories;
 
   const renderItem = ({ item }) => (
-    <View style={styles.item}>
-      <Image source={categoryBetterImages[item.categoryName] || { uri: item.categoryImage }} style={styles.image} />
-      <Text style={styles.text}>{item.categoryName}</Text>
-    </View>
+    <Pressable onPress={() => setSelectedCategory(selectedCategory === item.categoryName ? null : item.categoryName)}>
+      <View style={[styles.item, selectedCategory === item.categoryName && styles.selectedItem]}>
+        <Image source={categoryBetterImages[item.categoryName] || { uri: item.categoryImage }} style={styles.image} />
+        <Text style={[styles.text, selectedCategory === item.categoryName && { color: '#d7e7d7' }]}>{item.categoryName}</Text>
+      </View>
+    </Pressable>
   );
 
   return (
@@ -65,7 +67,7 @@ const styles = StyleSheet.create({
     margin: 5,
     alignItems: 'center',
     // backgroundColor: '#222429',
-    paddingVertical: 5,
+    paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 10,
     gap: 5,
@@ -90,5 +92,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     borderRadius: 12,
     marginLeft: 10,
+  },
+  selectedItem: {
+    backgroundColor: '#222429',
+    color: '#d7e7d7',
   },
 });
