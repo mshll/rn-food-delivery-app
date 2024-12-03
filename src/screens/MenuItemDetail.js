@@ -7,20 +7,30 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
+import { useCart } from '../context/CartContext';
 
 const MenuItemDetail = ({ route }) => {
-  const { menuItem } = route.params;
+  const { menuItem, restaurant } = route.params;
   const [quantity, setQuantity] = useState(1);
   const [total, setTotal] = useState(menuItem.price);
+  const navigation = useNavigation();
+  const { addToCart } = useCart();
 
   const handleQuantity = (val) => {
     setQuantity(val);
-    if (val < 0) setQuantity(0);
+    if (val < 1) setQuantity(1);
     if (val > 10) setQuantity(10);
   };
 
+  const handleAddToCart = async () => {
+    const success = await addToCart(menuItem, quantity, restaurant);
+    if (success) {
+      navigation.goBack();
+    }
+  };
+
   useEffect(() => {
-    setTotal(menuItem.price * quantity);
+    setTotal(Number((menuItem.price * quantity).toFixed(2)));
   }, [quantity]);
 
   return (
@@ -52,7 +62,7 @@ const MenuItemDetail = ({ route }) => {
               </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
                 <View style={{ flex: 1 }}>
-                  <Button title="Add to Cart" />
+                  <Button title="Add to Cart" onPress={handleAddToCart} />
                 </View>
               </View>
             </View>

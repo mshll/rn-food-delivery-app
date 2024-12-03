@@ -10,7 +10,7 @@ const RestaurantMenu = ({ restaurant, route }) => {
   const navigation = useNavigation();
 
   const renderItem = ({ item, index }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('MenuItemDetail', { menuItem: item })}>
+    <TouchableOpacity onPress={() => navigation.navigate('MenuItemDetail', { menuItem: item, restaurant })}>
       <View style={styles.item}>
         <Image source={{ uri: item.image }} style={styles.image} />
         <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
