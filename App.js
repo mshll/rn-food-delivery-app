@@ -8,6 +8,8 @@ import RestaurantMenu from './src/components/RestaurantMenu';
 import RestaurantDetail from './src/components/RestaurantDetail';
 import MenuItemDetail from './src/components/MenuItemDetail';
 import Cart from './src/components/Cart';
+import Login from './src/components/Login';
+import Signup from './src/components/Signup';
 
 export default function App() {
   return (
@@ -20,7 +22,9 @@ export default function App() {
       </CustomStatusBar> */}
       {/* <RestaurantDetail /> */}
       {/* <MenuItemDetail /> */}
-      <Cart />
+      {/* <Cart /> */}
+      {/* <Login /> */}
+      <Signup />
     </SafeAreaProvider>
   );
 }
