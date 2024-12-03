@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: '#1b1d21',
-    fontSize: 34,
+    fontSize: 28,
     fontWeight: 'bold',
   },
   item: {
@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
   headerSubText: {
     backgroundColor: '#1b1d21',
     color: '#d3e8d6',
-    fontSize: 34,
     paddingHorizontal: 8,
     paddingVertical: 1,
     fontWeight: 'bold',

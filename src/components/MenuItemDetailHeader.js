@@ -5,8 +5,7 @@ import restaurants from '../data/restaurants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { renderStars } from '../utils/utils';
 
-const MenuItemDetailHeader = ({}) => {
-  const menuItem = restaurants[0].menuItems[0];
+const MenuItemDetailHeader = ({ menuItem }) => {
   return (
     <View style={styles.container}>
       <Image source={{ uri: menuItem.image }} style={styles.image} />

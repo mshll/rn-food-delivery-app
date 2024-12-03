@@ -5,15 +5,14 @@ import restaurants from '../data/restaurants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { renderStars } from '../utils/utils';
 
-const RestaurantDetailHeader = ({}) => {
-  const restaurant = restaurants[0];
+const RestaurantDetailHeader = ({ restaurant }) => {
   return (
     <ImageBackground source={{ uri: restaurant.image }} style={styles.container}>
       <LinearGradient colors={['transparent', '#1b1d21']} style={styles.gradient}>
         <View style={styles.item}>
           <View style={styles.cardDetails}>
             <Text style={styles.textLarge}>{restaurant.name}</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 {renderStars(restaurant.rating)}
                 <Text style={styles.subText}> {restaurant.rating}</Text>
@@ -66,12 +65,12 @@ const styles = StyleSheet.create({
   },
   textLarge: {
     color: '#d3e8d6',
-    fontSize: 38,
+    fontSize: 30,
     fontWeight: '600',
   },
   subText: {
     color: '#f7ffae',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '500',
   },
 });

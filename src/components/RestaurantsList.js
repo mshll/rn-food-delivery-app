@@ -4,14 +4,14 @@ import Categories from './Categories';
 import Restaurants from './Restaurants';
 import { useState } from 'react';
 
-const RestaurantsList = () => {
+const RestaurantsList = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   return (
     <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
       <View style={styles.container}>
         <Categories setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory} />
-        <Restaurants selectedCategory={selectedCategory} />
+        <Restaurants selectedCategory={selectedCategory} navigation={navigation} />
       </View>
     </CustomStatusBar>
   );

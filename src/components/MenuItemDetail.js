@@ -7,8 +7,8 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useEffect, useState } from 'react';
 import Button from './Button';
 
-const MenuItemDetail = () => {
-  const menuItem = restaurants[0].menuItems[0];
+const MenuItemDetail = ({ route }) => {
+  const { menuItem } = route.params;
   const [quantity, setQuantity] = useState(1);
   const [total, setTotal] = useState(menuItem.price);
 
@@ -24,17 +24,17 @@ const MenuItemDetail = () => {
 
   return (
     <>
-      <MenuItemDetailHeader />
+      <MenuItemDetailHeader menuItem={menuItem} />
       <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
         <View style={styles.container}>
-          <View style={{ justifyContent: 'space-between', flex: 1 }}>
+          <View style={{ justifyContent: 'space-between', flex: 1, width: '100%' }}>
             {/* top */}
             <View>
               <Text style={styles.heading}>{menuItem.name}</Text>
               <Text style={{ color: '#d3e8d6', fontSize: 14, marginTop: 16 }}>{menuItem.description}</Text>
             </View>
             {/* bottom */}
-            <View>
+            <View style={{ width: '100%' }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16, marginHorizontal: 5 }}>
                 <View style={{ color: '#d3e8d6', flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
                   <Text style={{ color: '#d3e8d6', fontSize: 18, fontWeight: '600' }}>{total} KWD</Text>

@@ -1,45 +1,47 @@
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { renderStars } from '../utils/utils';
 
-const Restaurants = ({ selectedCategory }) => {
+const Restaurants = ({ selectedCategory, navigation }) => {
   const filteredRestaurants = selectedCategory ? restaurants.filter((item) => item.category === selectedCategory) : restaurants;
 
   const renderItem = ({ item, index }) => (
-    <View style={styles.item}>
-      <Image source={{ uri: item.image }} style={styles.image} />
-      <View style={styles.cardDetails}>
-        <Text
-          style={{
-            backgroundColor: '#d3e8d6',
-            color: '#1b1d21',
-            paddingVertical: 4,
-            paddingHorizontal: 10,
-            borderRadius: 500,
-            fontSize: 10,
-            fontWeight: '600',
-          }}
-        >
-          {item.category}
-        </Text>
-        <Text style={styles.text}>{item.name}</Text>
-        {/* <View style={styles.cardSubDetails}> */}
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {renderStars(item.rating)}
-          <Text style={styles.subText}> {item.rating}</Text>
-        </View>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Icon name="truck-fast" size={11} color="#7e878a" />
-          <Text style={[styles.subText, { color: '#7e878a' }]}>
-            {'  '}
-            {item.deliveryTime}
+    <TouchableOpacity onPress={() => navigation.navigate('RestaurantDetail', { restaurant: item })}>
+      <View style={styles.item}>
+        <Image source={{ uri: item.image }} style={styles.image} />
+        <View style={styles.cardDetails}>
+          <Text
+            style={{
+              backgroundColor: '#d3e8d6',
+              color: '#1b1d21',
+              paddingVertical: 4,
+              paddingHorizontal: 10,
+              borderRadius: 500,
+              fontSize: 10,
+              fontWeight: '600',
+            }}
+          >
+            {item.category}
           </Text>
+          <Text style={styles.text}>{item.name}</Text>
+          {/* <View style={styles.cardSubDetails}> */}
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {renderStars(item.rating)}
+            <Text style={styles.subText}> {item.rating}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Icon name="truck-fast" size={11} color="#7e878a" />
+            <Text style={[styles.subText, { color: '#7e878a' }]}>
+              {'  '}
+              {item.deliveryTime}
+            </Text>
+          </View>
+          {/* </View> */}
         </View>
-        {/* </View> */}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -86,7 +88,7 @@ const styles = StyleSheet.create({
   headerText: {
     backgroundColor: '#1b1d21',
     color: '#d3e8d6',
-    fontSize: 34,
+    fontSize: 28,
     fontWeight: 'bold',
   },
   item: {
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
   text: {
     // backgroundColor: 'blue',
     color: '#d3e8d6',
-    fontSize: 26,
+    fontSize: 20,
     fontWeight: '700',
   },
   image: {
@@ -116,11 +118,10 @@ const styles = StyleSheet.create({
   headerSubText: {
     backgroundColor: '#d3e8d6',
     color: '#1b1d21',
-    fontSize: 34,
+    fontSize: 24,
     paddingHorizontal: 8,
     paddingVertical: 1,
     fontWeight: 'bold',
-    fontSize: 24,
     borderRadius: 12,
     marginLeft: 10,
   },

@@ -1,26 +1,29 @@
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { renderStars } from '../utils/utils';
 import Button from './Button';
+import { useNavigation } from '@react-navigation/native';
 
-const RestaurantMenu = () => {
-  const restaurant = restaurants[0]; // TODO
+const RestaurantMenu = ({ restaurant, route }) => {
+  const navigation = useNavigation();
 
   const renderItem = ({ item, index }) => (
-    <View style={styles.item}>
-      <Image source={{ uri: item.image }} style={styles.image} />
-      <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
-        <View style={styles.cardDetails}>
-          <Text style={styles.text}>{item.name}</Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={styles.subText}>{item.price} KWD</Text>
+    <TouchableOpacity onPress={() => navigation.navigate('MenuItemDetail', { menuItem: item })}>
+      <View style={styles.item}>
+        <Image source={{ uri: item.image }} style={styles.image} />
+        <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
+          <View style={styles.cardDetails}>
+            <Text style={styles.text}>{item.name}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={styles.subText}>{item.price} KWD</Text>
+            </View>
           </View>
+          <Icon name="chevron-right" size={14} color="#7e878a" style={{ marginHorizontal: 10 }} />
         </View>
-        <Icon name="chevron-right" size={14} color="#7e878a" style={{ marginHorizontal: 10 }} />
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
   headerText: {
     backgroundColor: '#1b1d21',
     color: '#d3e8d6',
-    fontSize: 34,
+    fontSize: 28,
     fontWeight: 'bold',
   },
   item: {
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
   text: {
     // backgroundColor: 'blue',
     color: '#d3e8d6',
-    fontSize: 26,
+    fontSize: 20,
     fontWeight: '700',
   },
   image: {
@@ -97,11 +100,10 @@ const styles = StyleSheet.create({
   headerSubText: {
     backgroundColor: '#d3e8d6',
     color: '#1b1d21',
-    fontSize: 34,
     paddingHorizontal: 8,
     paddingVertical: 1,
     fontWeight: 'bold',
-    fontSize: 24,
+    fontSize: 20,
     borderRadius: 12,
     marginLeft: 10,
   },
@@ -125,7 +127,7 @@ const styles = StyleSheet.create({
   },
   subText: {
     color: '#f7ffae',
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '500',
   },
 });
