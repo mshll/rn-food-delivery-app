@@ -7,6 +7,7 @@ import CustomStatusBar from './src/components/CustomStatusBar';
 import RestaurantMenu from './src/components/RestaurantMenu';
 import RestaurantDetail from './src/components/RestaurantDetail';
 import MenuItemDetail from './src/components/MenuItemDetail';
+import Cart from './src/components/Cart';
 
 export default function App() {
   return (
@@ -18,7 +19,8 @@ export default function App() {
           </View>
       </CustomStatusBar> */}
       {/* <RestaurantDetail /> */}
-      <MenuItemDetail />
+      {/* <MenuItemDetail /> */}
+      <Cart />
     </SafeAreaProvider>
   );
 }
