@@ -35,8 +35,8 @@ const RestaurantMenu = ({ restaurant, route }) => {
         numColumns={1}
         ListHeaderComponent={
           <View style={styles.header}>
-            <Text style={styles.headerText}>Menu</Text>
-            <Text style={styles.headerSubText}>{restaurant.menuItems.length}</Text>
+            {/* <Text style={styles.headerText}>Menu</Text>
+            <Text style={styles.headerSubText}>{restaurant.menuItems.length}</Text> */}
           </View>
         }
         stickyHeaderIndices={[0]}
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingVertical: 16,
+    paddingVertical: 5,
   },
   headerText: {
     backgroundColor: '#1b1d21',
@@ -87,12 +87,12 @@ const styles = StyleSheet.create({
   text: {
     // backgroundColor: 'blue',
     color: '#d3e8d6',
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 16,
+    fontFamily: 'Poppins_600SemiBold',
   },
   image: {
-    height: 125,
-    width: 125,
+    height: 100,
+    width: 100,
     borderRadius: 10,
     backgroundColor: '#282a2f',
     objectFit: 'cover',
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   subText: {
     color: '#f7ffae',
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 14,
+    fontFamily: 'Poppins_500Medium',
   },
 });

@@ -50,11 +50,11 @@ const MenuItemDetail = ({ route }) => {
                 <View style={{ color: '#d3e8d6', flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
                   <Text style={{ color: '#d3e8d6', fontSize: 18, fontWeight: '600' }}>{total} KWD</Text>
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 1 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 0, gap: 15 }}>
                   <TouchableOpacity style={styles.icon} onPress={() => handleQuantity(quantity - 1)}>
                     <Icon name="minus" size={18} color="#d8e6ea" />
                   </TouchableOpacity>
-                  <Text style={{ color: '#d3e8d6', fontSize: 18, fontWeight: 'bold' }}>{quantity}</Text>
+                  <Text style={{ color: '#d3e8d6', fontSize: 18, fontFamily: 'Poppins_600SemiBold' }}>{quantity}</Text>
                   <TouchableOpacity style={styles.icon} onPress={() => handleQuantity(quantity + 1)}>
                     <Icon name="plus" size={18} color="#d8e6ea" />
                   </TouchableOpacity>
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
   heading: {
     color: '#f9ffb7',
     fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
+    fontFamily: 'Poppins_600SemiBold',
+    marginBottom: 10,
   },
   icon: {
     alignItems: 'center',

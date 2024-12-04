@@ -19,7 +19,7 @@ const Categories = ({ setSelectedCategory, selectedCategory }) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>Cuisines</Text>
-        <Text style={styles.headerSubText}>{categories.length}</Text>
+        {/* <Text style={styles.headerSubText}>{categories.length}</Text> */}
       </View>
       <FlatList
         data={categories}
@@ -42,25 +42,24 @@ const styles = StyleSheet.create({
     backgroundColor: '#d3e8d6',
     justifyContent: 'center',
     alignSelf: 'stretch',
-    color: '#fff',
     borderEndEndRadius: 20,
     borderEndStartRadius: 20,
     paddingBottom: 10,
   },
   header: {
     backgroundColor: '#d3e8d6',
-    color: '#d3e8d6',
+    color: '#485c48',
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingTop: 5,
-    paddingBottom: 16,
+    paddingBottom: 5,
     paddingHorizontal: 16,
   },
   headerText: {
-    color: '#1b1d21',
-    fontSize: 28,
-    fontWeight: 'bold',
+    color: '#485c48',
+    fontSize: 24,
+    fontFamily: 'Poppins_600SemiBold',
   },
   item: {
     // marginHorizontal: 10,
@@ -73,9 +72,9 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   text: {
-    color: '#222429',
-    fontSize: 16,
-    fontWeight: '500',
+    color: '#485c48',
+    fontSize: 14,
+    fontFamily: 'Poppins_500Medium',
   },
   image: {
     width: 50,
@@ -93,7 +92,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   selectedItem: {
-    backgroundColor: '#222429',
+    backgroundColor: '#485c48',
     color: '#d7e7d7',
   },
 });

@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCart } from '../context/CartContext';
 
-const CustomHeader = ({ navigation, title, route, absolute = true, backgroundColor = 'transparent', ...props }) => {
+const CustomHeader = ({ navigation, title, route, absolute = true, backgroundColor = 'transparent', showLogo = false, ...props }) => {
   const insets = useSafeAreaInsets();
   const { cartItems } = useCart();
 
@@ -12,15 +12,19 @@ const CustomHeader = ({ navigation, title, route, absolute = true, backgroundCol
 
   return (
     <View style={[styles.header, { paddingTop: insets.top, backgroundColor }, absolute ? { position: 'absolute' } : { position: 'relative' }]}>
-      <View>
+      <View style={{ flex: 1, alignItems: 'flex-start' }}>
         {navigation.canGoBack() && (
           <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
             <Icon name="chevron-left" size={15} color="#d3e8d6" />
           </TouchableOpacity>
         )}
       </View>
-      {/* <Text style={styles.title}>ZestZoom</Text> */}
-      <View>
+      {showLogo && (
+        <View style={{ flex: 2, alignItems: 'center' }}>
+          <Text style={styles.title}>ZestZoom</Text>
+        </View>
+      )}
+      <View style={{ flex: 1, alignItems: 'flex-end' }}>
         <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Cart')}>
           <Icon name="cart-shopping" size={15} color="#d3e8d6" />
           {cartItemsCount > 0 && (
@@ -45,9 +49,11 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#d3e8d6',
+    fontSize: 28,
+    fontFamily: 'Poppins_800ExtraBold',
+    color: '#485c48',
+    fontStyle: 'italic',
+    letterSpacing: 1,
   },
   iconButton: {
     backgroundColor: '#222429',
@@ -72,7 +78,7 @@ const styles = StyleSheet.create({
   },
   badgeText: {
     color: '#1b1d21',
-    fontSize: 12,
+    fontSize: 10,
     fontWeight: 'bold',
   },
 });

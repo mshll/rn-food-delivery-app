@@ -8,7 +8,7 @@ const RestaurantsPage = ({ navigation }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   return (
-    <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21" useTopPadding={true}>
+    <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21" useTopPadding={false}>
       <View style={styles.container}>
         <Categories setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory} />
         <RestaurantsList selectedCategory={selectedCategory} navigation={navigation} />

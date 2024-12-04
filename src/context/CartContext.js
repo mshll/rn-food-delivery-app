@@ -64,11 +64,16 @@ export const CartProvider = ({ children }) => {
       removeFromCart(itemId);
       return;
     }
+    if (quantity > 10) quantity = 10;
     setCartItems((prevItems) => prevItems.map((item) => (item.id === itemId ? { ...item, quantity } : item)));
   };
 
   const getCartTotal = () => {
     return Number(cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2));
+  };
+
+  const getCartRestaurant = () => {
+    return restaurant;
   };
 
   return (
@@ -80,6 +85,7 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         updateQuantity,
         getCartTotal,
+        getCartRestaurant,
         clearCart,
       }}
     >

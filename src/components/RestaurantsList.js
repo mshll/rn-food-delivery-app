@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import restaurants from '../data/restaurants';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import Icon from 'react-native-vector-icons/Feather';
 import { renderStars } from '../utils/utils';
 
 const RestaurantsList = ({ selectedCategory, navigation }) => {
@@ -10,7 +10,7 @@ const RestaurantsList = ({ selectedCategory, navigation }) => {
   const renderItem = ({ item, index }) => (
     <TouchableOpacity onPress={() => navigation.navigate('RestaurantDetail', { restaurant: item })}>
       <View style={styles.item}>
-        <Image source={{ uri: item.image }} style={styles.image} />
+        <Image source={{ uri: item.image }} style={styles.image} shared />
         <View style={styles.cardDetails}>
           <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
             <Text
@@ -22,6 +22,9 @@ const RestaurantsList = ({ selectedCategory, navigation }) => {
                 borderRadius: 500,
                 fontSize: 10,
                 fontWeight: '600',
+                position: 'absolute',
+                top: 0,
+                right: 0,
               }}
             >
               {item.category}
@@ -34,11 +37,8 @@ const RestaurantsList = ({ selectedCategory, navigation }) => {
             <Text style={styles.subText}> {item.rating}</Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Icon name="truck-fast" size={11} color="#7e878a" />
-            <Text style={[styles.subText, { color: '#7e878a' }]}>
-              {'  '}
-              {item.deliveryTime}
-            </Text>
+            <Icon name="clock" size={14} color="#7e878a" />
+            <Text style={[styles.subText, { color: '#7e878a' }]}> {item.deliveryTime}</Text>
           </View>
           {/* </View> */}
         </View>
@@ -57,7 +57,7 @@ const RestaurantsList = ({ selectedCategory, navigation }) => {
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.headerText}>Restaurants</Text>
-            <Text style={styles.headerSubText}>{filteredRestaurants.length}</Text>
+            {/* <Text style={styles.headerSubText}>{filteredRestaurants.length}</Text> */}
           </View>
         }
         stickyHeaderIndices={[0]}
@@ -85,13 +85,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingVertical: 16,
+    paddingTop: 16,
+    paddingBottom: 10,
   },
   headerText: {
     backgroundColor: '#1b1d21',
     color: '#d3e8d6',
-    fontSize: 28,
-    fontWeight: 'bold',
+    fontSize: 24,
+    fontFamily: 'Poppins_600SemiBold',
   },
   item: {
     flex: 1,
@@ -107,12 +108,12 @@ const styles = StyleSheet.create({
   text: {
     // backgroundColor: 'blue',
     color: '#d3e8d6',
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 18,
+    fontFamily: 'Poppins_600SemiBold',
   },
   image: {
-    height: 125,
-    width: 125,
+    height: 100,
+    width: 100,
     borderRadius: 10,
     backgroundColor: '#282a2f',
     objectFit: 'contain',
@@ -137,7 +138,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    gap: 7,
+    gap: 10,
+    position: 'relative',
   },
   cardSubDetails: {
     // backgroundColor: 'blue',

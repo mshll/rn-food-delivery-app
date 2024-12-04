@@ -58,19 +58,22 @@ const Cart = () => {
     <CustomStatusBar statusBgColor="#1b1d21" bgColor="#1b1d21">
       <View style={styles.container}>
         <View style={{ justifyContent: 'space-between', flex: 1, width: '100%' }}>
-          <View>
+          <View style={{ flex: 1 }}>
             <Text style={styles.heading}>Cart</Text>
             {restaurant && <Text style={{ color: '#797b89', fontSize: 16, marginBottom: 16 }}>From: {restaurant.name}</Text>}
             <FlatList
               data={cartItems}
               renderItem={({ item }) => <CartItem item={item} onUpdateQuantity={updateQuantity} />}
               keyExtractor={(item) => item.id}
+              showsVerticalScrollIndicator={false}
+              ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+              contentContainerStyle={{ flex: 1 }}
             />
           </View>
           <View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
               <View style={{ color: '#d3e8d6', flex: 1, alignItems: 'flex-start', justifyContent: 'space-between', gap: 5 }}>
-                <Text style={{ color: '#96a1a4', fontSize: 12, fontWeight: '300' }}>Total</Text>
+                <Text style={{ color: '#797b89', fontSize: 12, fontWeight: '400' }}>Total</Text>
                 <Text style={{ color: '#d3e8d6', fontSize: 18, fontWeight: '600' }}>{getCartTotal()} KWD</Text>
               </View>
               <View style={{ flex: 1 }}>
@@ -99,7 +102,7 @@ const styles = StyleSheet.create({
     color: '#f9ffb7',
     fontSize: 38,
     fontWeight: '700',
-    marginBottom: 16,
+    marginBottom: 10,
   },
   icon: {
     alignItems: 'center',

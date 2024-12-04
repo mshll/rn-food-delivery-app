@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, FlatList, ImageBackground } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import Icon from 'react-native-vector-icons/Feather';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import restaurants from '../data/restaurants';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -18,7 +18,7 @@ const RestaurantDetailHeader = ({ restaurant }) => {
                 <Text style={styles.subText}> {restaurant.rating}</Text>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Icon name="truck-fast" size={11} color="#f7ffae" />
+                <Icon name="clock" size={14} color="#f7ffae" />
                 <Text style={[styles.subText, { color: '#f7ffae' }]}>
                   {'  '}
                   {restaurant.deliveryTime}
@@ -61,16 +61,16 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 1,
     justifyContent: 'flex-end',
-    gap: 10,
+    gap: 5,
   },
   textLarge: {
     color: '#d3e8d6',
     fontSize: 30,
-    fontWeight: '600',
+    fontFamily: 'Poppins_600SemiBold',
   },
   subText: {
     color: '#f7ffae',
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 14,
+    fontFamily: 'Poppins_500Medium',
   },
 });
