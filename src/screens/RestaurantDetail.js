@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   },
   cartButton: {
     paddingHorizontal: 20,
-    paddingVertical: 5,
+    paddingVertical: 7,
     backgroundColor: '#1b1d21',
   },
   cartButtonContent: {

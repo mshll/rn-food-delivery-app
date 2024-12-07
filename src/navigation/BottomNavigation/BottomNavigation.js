@@ -37,7 +37,7 @@ const BottomNavigation = () => {
       <Tab.Screen
         name="Account"
         component={HomeNavigation}
-        // initialParams={{ screen: 'Account' }}
+        initialParams={{ screen: 'Account' }}
         options={{
           tabBarIcon: ({ color, size }) => <Icon name="user" size={size - 3} color={color} />,
         }}

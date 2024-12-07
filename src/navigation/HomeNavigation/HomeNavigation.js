@@ -7,6 +7,7 @@ import Login from '../../screens/Login';
 import Signup from '../../screens/Signup';
 import RestaurantsPage from '../../screens/Restaurants';
 import Explore from '../../screens/Explore';
+import Account from '../../screens/Account';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,8 @@ export default function HomeNavigation() {
             absolute={options.absolute}
             backgroundColor={options.backgroundColor}
             showLogo={options.showLogo}
+            showTitle={options.showTitle}
+            titleColor={options.titleColor}
           />
         ),
       })}
@@ -34,10 +37,11 @@ export default function HomeNavigation() {
       />
       <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} options={{ absolute: true }} />
       <Stack.Screen name="MenuItemDetail" component={MenuItemDetail} options={{ presentation: 'transparentModal', headerShown: false }} />
-      <Stack.Screen name="Cart" component={Cart} options={{ backgroundColor: '#1b1d21', absolute: false }} />
+      <Stack.Screen name="Cart" component={Cart} options={{ presentation: 'modal', backgroundColor: '#1b1d21', headerShown: false }} />
       <Stack.Screen name="Login" component={Login} options={{}} />
       <Stack.Screen name="Signup" component={Signup} options={{}} />
-      <Stack.Screen name="Explore" component={Explore} options={{}} />
+      <Stack.Screen name="Explore" component={Explore} options={{ absolute: false, backgroundColor: '#d3e8d6', showTitle: true, title: 'Explore' }} />
+      <Stack.Screen name="Account" component={Account} options={{ absolute: false, backgroundColor: '#d3e8d6', showTitle: true, title: 'Account' }} />
     </Stack.Navigator>
   );
 }

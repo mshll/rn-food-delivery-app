@@ -1,10 +1,13 @@
-import { StyleSheet, Text, View, FlatList, ImageBackground, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ImageBackground, Image, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import restaurants from '../data/restaurants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { renderStars } from '../utils/utils';
 import dishesBetterImages from '../data/dishesBetterImages';
+
+const { width } = Dimensions.get('window');
+const IMAGE_HEIGHT = 300;
 
 const MenuItemDetailHeader = ({ menuItem }) => {
   return (
@@ -18,16 +21,15 @@ export default MenuItemDetailHeader;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0,
-    justifyContent: 'center',
-    alignSelf: 'center',
+    width: width * 0.95,
+    height: IMAGE_HEIGHT,
     backgroundColor: 'transparent',
-    height: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
-    flex: 1,
+    width: '100%',
+    height: '100%',
     resizeMode: 'contain',
-    borderBottomEndRadius: 20,
-    borderBottomStartRadius: 20,
   },
 });

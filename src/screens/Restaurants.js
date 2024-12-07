@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import CustomStatusBar from '../components/CustomStatusBar';
 import Categories from '../components/Categories';
 import { useState } from 'react';
@@ -10,8 +10,10 @@ const RestaurantsPage = ({ navigation }) => {
   return (
     <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21" useTopPadding={false}>
       <View style={styles.container}>
-        <Categories setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory} />
-        <RestaurantsList selectedCategory={selectedCategory} navigation={navigation} />
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Categories setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory} />
+          <RestaurantsList selectedCategory={selectedCategory} navigation={navigation} />
+        </ScrollView>
       </View>
     </CustomStatusBar>
   );

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, Pressable, TouchableOpacity } from 'react-native';
 import restaurantCategories from '../data/categories';
 import categoryBetterImages from '../data/categoryBetterImages';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,12 +7,12 @@ const Categories = ({ setSelectedCategory, selectedCategory }) => {
   const categories = restaurantCategories;
 
   const renderItem = ({ item }) => (
-    <Pressable onPress={() => setSelectedCategory(selectedCategory === item.categoryName ? null : item.categoryName)}>
+    <TouchableOpacity onPress={() => setSelectedCategory(selectedCategory === item.categoryName ? null : item.categoryName)}>
       <View style={[styles.item, selectedCategory === item.categoryName && styles.selectedItem]}>
         <Image source={categoryBetterImages[item.categoryName] || { uri: item.categoryImage }} style={styles.image} />
         <Text style={[styles.text, selectedCategory === item.categoryName && { color: '#d7e7d7' }]}>{item.categoryName}</Text>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 
   return (

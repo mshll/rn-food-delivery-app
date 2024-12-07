@@ -1,4 +1,6 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Dimensions, Pressable, Alert } from 'react-native';
+import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
+import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring, runOnJS } from 'react-native-reanimated';
 import RestaurantMenu from '../components/RestaurantMenu';
 import CustomStatusBar from '../components/CustomStatusBar';
 import MenuItemDetailHeader from '../components/MenuItemDetailHeader';
@@ -9,12 +11,38 @@ import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import { useCart } from '../context/CartContext';
 
+const { height, width } = Dimensions.get('window');
+
 const MenuItemDetail = ({ route }) => {
   const { menuItem, restaurant } = route.params;
   const [quantity, setQuantity] = useState(1);
   const [total, setTotal] = useState(menuItem.price);
   const navigation = useNavigation();
   const { addToCart } = useCart();
+
+  const translateY = useSharedValue(0);
+
+  const panGestureHandler = useAnimatedGestureHandler({
+    onStart: (_, context) => {
+      context.startY = translateY.value;
+    },
+    onActive: (event, context) => {
+      translateY.value = context.startY + event.translationY;
+    },
+    onEnd: (event) => {
+      if (event.translationY > 100) {
+        runOnJS(navigation.goBack)();
+      } else {
+        translateY.value = withSpring(0);
+      }
+    },
+  });
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY.value }],
+    };
+  });
 
   const handleQuantity = (val) => {
     setQuantity(val);
@@ -34,61 +62,127 @@ const MenuItemDetail = ({ route }) => {
   }, [quantity]);
 
   return (
-    <>
-      {/* <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21" useTopPadding={false}> */}
-      <View style={styles.container}>
-        <MenuItemDetailHeader menuItem={menuItem} />
-        <View style={{ justifyContent: 'space-between', flex: 1, width: '100%' }}>
-          {/* top */}
-          <View>
-            <Text style={styles.heading}>{menuItem.name}</Text>
-            <Text style={{ color: '#d3e8d6', fontSize: 14, marginTop: 16 }}>{menuItem.description}</Text>
-          </View>
-          {/* bottom */}
-          <View style={{ width: '100%' }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16, marginHorizontal: 5 }}>
-              <View style={{ color: '#d3e8d6', flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
-                <Text style={{ color: '#d3e8d6', fontSize: 18, fontWeight: '600' }}>{total} KWD</Text>
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 0, gap: 15 }}>
-                <TouchableOpacity style={styles.icon} onPress={() => handleQuantity(quantity - 1)}>
-                  <Icon name="minus" size={18} color="#d8e6ea" />
-                </TouchableOpacity>
-                <Text style={{ color: '#d3e8d6', fontSize: 18, fontFamily: 'Poppins_600SemiBold' }}>{quantity}</Text>
-                <TouchableOpacity style={styles.icon} onPress={() => handleQuantity(quantity + 1)}>
-                  <Icon name="plus" size={18} color="#d8e6ea" />
-                </TouchableOpacity>
+    <View style={styles.modalContainer}>
+      <TouchableOpacity style={styles.dismissOverlay} activeOpacity={1} onPress={() => navigation.goBack()} />
+
+      <View style={styles.emptySpace} />
+
+      <GestureHandlerRootView style={styles.contentContainer}>
+        <PanGestureHandler onGestureEvent={panGestureHandler}>
+          <Animated.View style={[styles.contentWrapper, animatedStyle]}>
+            <View style={styles.imageContainer}>
+              <MenuItemDetailHeader menuItem={menuItem} />
+            </View>
+
+            <View style={styles.detailsCard}>
+              <View style={styles.content}>
+                <View style={styles.detailsContent}>
+                  <Text style={styles.heading}>{menuItem.name}</Text>
+                  <Text style={styles.description}>{menuItem.description}</Text>
+                </View>
+
+                <View style={styles.controls}>
+                  <View style={styles.priceQuantityContainer}>
+                    <Text style={styles.price}>{total} KWD</Text>
+                    <View style={styles.quantityControls}>
+                      <TouchableOpacity style={styles.icon} onPress={() => handleQuantity(quantity - 1)}>
+                        <Icon name="minus" size={18} color="#d8e6ea" />
+                      </TouchableOpacity>
+                      <Text style={styles.quantityText}>{quantity}</Text>
+                      <TouchableOpacity style={styles.icon} onPress={() => handleQuantity(quantity + 1)}>
+                        <Icon name="plus" size={18} color="#d8e6ea" />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+
+                  <View style={styles.buttonContainer}>
+                    <Button title="Add to Cart" onPress={handleAddToCart} />
+                  </View>
+                </View>
               </View>
             </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
-              <View style={{ flex: 1 }}>
-                <Button title="Add to Cart" onPress={handleAddToCart} />
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-      {/* </CustomStatusBar> */}
-    </>
+          </Animated.View>
+        </PanGestureHandler>
+      </GestureHandlerRootView>
+    </View>
   );
 };
+
 export default MenuItemDetail;
 
 const styles = StyleSheet.create({
-  container: {
-    height: '50vh',
-    backgroundColor: 'red',
-    width: '100vw',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    marginHorizontal: 20,
-    marginTop: 16,
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  dismissOverlay: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  emptySpace: {
+    flex: 0.3,
+  },
+  contentContainer: {
+    flex: 0.7,
+  },
+  contentWrapper: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  imageContainer: {
+    alignSelf: 'center',
+    marginBottom: -150,
+    zIndex: 2,
+  },
+  detailsCard: {
+    backgroundColor: '#1b1d21',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    minHeight: height * 0.55,
+    zIndex: 1,
+  },
+  content: {
+    padding: 20,
+    paddingTop: 0,
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  detailsContent: {
+    marginTop: 160,
   },
   heading: {
     color: '#f9ffb7',
     fontSize: 24,
     fontFamily: 'Poppins_600SemiBold',
     marginBottom: 10,
+  },
+  description: {
+    color: '#d3e8d6',
+    fontSize: 14,
+    marginTop: 16,
+  },
+  controls: {
+    marginTop: 20,
+  },
+  priceQuantityContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  price: {
+    color: '#d3e8d6',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  quantityControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 15,
+  },
+  quantityText: {
+    color: '#d3e8d6',
+    fontSize: 18,
+    fontFamily: 'Poppins_600SemiBold',
   },
   icon: {
     alignItems: 'center',
@@ -98,5 +192,9 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 40,
     height: 40,
+  },
+  buttonContainer: {
+    width: '100%',
+    paddingBottom: 10,
   },
 });

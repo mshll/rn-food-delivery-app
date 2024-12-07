@@ -1,18 +1,31 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCart } from '../context/CartContext';
 
-const CustomHeader = ({ navigation, title, route, absolute = true, backgroundColor = 'transparent', showLogo = false, ...props }) => {
+const CustomHeader = ({
+  navigation,
+  title,
+  route,
+  absolute = true,
+  backgroundColor = 'transparent',
+  showLogo = false,
+  showTitle = false,
+  titleColor = '#485c48',
+  ...props
+}) => {
   const insets = useSafeAreaInsets();
   const { cartItems } = useCart();
   const isCartScreen = route?.name === 'Cart';
+  const isExploreScreen = route?.name === 'Explore';
+  const isAccountScreen = route?.name === 'Account';
+  const isHomeScreen = route?.name === 'Home';
 
   const cartItemsCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const renderLeftButton = () => {
-    if (navigation.canGoBack()) {
+    if (navigation.canGoBack() && !isHomeScreen && !isExploreScreen && !isAccountScreen) {
       return (
         <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
           <Icon name="chevron-left" size={15} color="#d3e8d6" />
@@ -40,7 +53,10 @@ const CustomHeader = ({ navigation, title, route, absolute = true, backgroundCol
 
   return (
     <View style={[styles.header, { paddingTop: insets.top, backgroundColor }, absolute ? { position: 'absolute' } : { position: 'relative' }]}>
-      <View style={styles.leftContainer}>{renderLeftButton()}</View>
+      <View style={styles.leftContainer}>
+        {renderLeftButton()}
+        {showTitle && title && <Text style={[styles.headerTitle, { color: titleColor }]}>{title}</Text>}
+      </View>
       {showLogo && (
         <View style={styles.centerContainer}>
           <Text style={styles.title}>ZestZoom</Text>
@@ -62,7 +78,8 @@ const styles = StyleSheet.create({
   },
   leftContainer: {
     flex: 1,
-    alignItems: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   centerContainer: {
     flex: 2,
@@ -104,6 +121,11 @@ const styles = StyleSheet.create({
     color: '#1b1d21',
     fontSize: 10,
     fontWeight: 'bold',
+  },
+  headerTitle: {
+    fontSize: 26,
+    fontFamily: 'Poppins_600SemiBold',
+    marginLeft: 10,
   },
 });
 
