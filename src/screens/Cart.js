@@ -41,9 +41,12 @@ const Cart = () => {
       <CustomStatusBar statusBgColor="#1b1d21" bgColor="#1b1d21">
         <View style={styles.container}>
           <View style={{ justifyContent: 'space-between', flex: 1, width: '100%' }}>
-            <View>
+            <View style={{ flex: 1 }}>
               <Text style={styles.heading}>Cart</Text>
-              <Text style={{ color: '#d3e8d6', fontSize: 16, textAlign: 'center', marginTop: 20 }}>Your cart is empty</Text>
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ color: '#797b89', fontSize: 16, textAlign: 'center', marginBottom: 8 }}>Your cart is empty</Text>
+                <Text style={{ color: '#797b89', fontSize: 16, textAlign: 'center' }}>Add items to get started</Text>
+              </View>
             </View>
             <View>
               <Button title="Go Back" onPress={() => navigation.pop()} />

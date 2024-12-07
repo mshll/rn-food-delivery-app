@@ -10,6 +10,7 @@ import {
   Poppins_700Bold,
   Poppins_800ExtraBold,
 } from '@expo-google-fonts/poppins';
+import BottomNavigation from './src/navigation/BottomNavigation/BottomNavigation';
 
 export default function App() {
   let [fontLoaded] = useFonts({
@@ -27,7 +28,7 @@ export default function App() {
   return (
     <CartProvider>
       <NavigationContainer>
-        <HomeNavigation />
+        <BottomNavigation />
       </NavigationContainer>
     </CartProvider>
   );

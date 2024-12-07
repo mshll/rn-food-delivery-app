@@ -5,22 +5,25 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { renderStars } from '../utils/utils';
 import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
+import dishesBetterImages from '../data/dishesBetterImages';
 
 const RestaurantMenu = ({ restaurant, route }) => {
   const navigation = useNavigation();
 
   const renderItem = ({ item, index }) => (
     <TouchableOpacity onPress={() => navigation.navigate('MenuItemDetail', { menuItem: item, restaurant })}>
-      <View style={styles.item}>
-        <Image source={{ uri: item.image }} style={styles.image} />
-        <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
-          <View style={styles.cardDetails}>
-            <Text style={styles.text}>{item.name}</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={styles.subText}>{item.price} KWD</Text>
+      <View style={styles.itemContainer}>
+        <Image source={dishesBetterImages[item.name] || { uri: item.image }} style={styles.image} />
+        <View style={styles.item}>
+          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
+            <View style={styles.cardDetails}>
+              <Text style={styles.text}>{item.name}</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={styles.subText}>{item.price} KWD</Text>
+              </View>
             </View>
+            <Icon name="chevron-right" size={14} color="#7e878a" style={{ marginHorizontal: 10 }} />
           </View>
-          <Icon name="chevron-right" size={14} color="#7e878a" style={{ marginHorizontal: 10 }} />
         </View>
       </View>
     </TouchableOpacity>
@@ -72,20 +75,26 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
   },
+  itemContainer: {
+    marginVertical: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingLeft: 16,
+  },
   item: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#222429',
     padding: 10,
+    paddingLeft: 52,
+    marginLeft: -50,
     borderRadius: 10,
-    // gap: 10,
     borderColor: '#282a2f',
     borderWidth: 1,
-    position: 'relative',
+    minHeight: 120,
   },
   text: {
-    // backgroundColor: 'blue',
     color: '#d3e8d6',
     fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
@@ -93,9 +102,7 @@ const styles = StyleSheet.create({
   image: {
     height: 100,
     width: 100,
-    borderRadius: 10,
-    backgroundColor: '#282a2f',
-    objectFit: 'cover',
+    zIndex: 1,
   },
   headerSubText: {
     backgroundColor: '#d3e8d6',
@@ -108,22 +115,20 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   cardDetails: {
-    // backgroundColor: 'purple',
     padding: 10,
+    paddingLeft: 5,
     paddingBottom: 10,
     width: '100%',
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    gap: 7,
+    gap: 10,
   },
   cardSubDetails: {
-    // backgroundColor: 'blue',
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // padding: 5,
   },
   subText: {
     color: '#f7ffae',

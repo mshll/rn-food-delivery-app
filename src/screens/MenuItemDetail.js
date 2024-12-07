@@ -35,40 +35,40 @@ const MenuItemDetail = ({ route }) => {
 
   return (
     <>
-      <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21" useTopPadding={false}>
+      {/* <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21" useTopPadding={false}> */}
+      <View style={styles.container}>
         <MenuItemDetailHeader menuItem={menuItem} />
-        <View style={styles.container}>
-          <View style={{ justifyContent: 'space-between', flex: 1, width: '100%' }}>
-            {/* top */}
-            <View>
-              <Text style={styles.heading}>{menuItem.name}</Text>
-              <Text style={{ color: '#d3e8d6', fontSize: 14, marginTop: 16 }}>{menuItem.description}</Text>
-            </View>
-            {/* bottom */}
-            <View style={{ width: '100%' }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16, marginHorizontal: 5 }}>
-                <View style={{ color: '#d3e8d6', flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
-                  <Text style={{ color: '#d3e8d6', fontSize: 18, fontWeight: '600' }}>{total} KWD</Text>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 0, gap: 15 }}>
-                  <TouchableOpacity style={styles.icon} onPress={() => handleQuantity(quantity - 1)}>
-                    <Icon name="minus" size={18} color="#d8e6ea" />
-                  </TouchableOpacity>
-                  <Text style={{ color: '#d3e8d6', fontSize: 18, fontFamily: 'Poppins_600SemiBold' }}>{quantity}</Text>
-                  <TouchableOpacity style={styles.icon} onPress={() => handleQuantity(quantity + 1)}>
-                    <Icon name="plus" size={18} color="#d8e6ea" />
-                  </TouchableOpacity>
-                </View>
+        <View style={{ justifyContent: 'space-between', flex: 1, width: '100%' }}>
+          {/* top */}
+          <View>
+            <Text style={styles.heading}>{menuItem.name}</Text>
+            <Text style={{ color: '#d3e8d6', fontSize: 14, marginTop: 16 }}>{menuItem.description}</Text>
+          </View>
+          {/* bottom */}
+          <View style={{ width: '100%' }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 16, marginHorizontal: 5 }}>
+              <View style={{ color: '#d3e8d6', flex: 1, alignItems: 'flex-start', justifyContent: 'center' }}>
+                <Text style={{ color: '#d3e8d6', fontSize: 18, fontWeight: '600' }}>{total} KWD</Text>
               </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
-                <View style={{ flex: 1 }}>
-                  <Button title="Add to Cart" onPress={handleAddToCart} />
-                </View>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', flex: 0, gap: 15 }}>
+                <TouchableOpacity style={styles.icon} onPress={() => handleQuantity(quantity - 1)}>
+                  <Icon name="minus" size={18} color="#d8e6ea" />
+                </TouchableOpacity>
+                <Text style={{ color: '#d3e8d6', fontSize: 18, fontFamily: 'Poppins_600SemiBold' }}>{quantity}</Text>
+                <TouchableOpacity style={styles.icon} onPress={() => handleQuantity(quantity + 1)}>
+                  <Icon name="plus" size={18} color="#d8e6ea" />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
+              <View style={{ flex: 1 }}>
+                <Button title="Add to Cart" onPress={handleAddToCart} />
               </View>
             </View>
           </View>
         </View>
-      </CustomStatusBar>
+      </View>
+      {/* </CustomStatusBar> */}
     </>
   );
 };
@@ -76,8 +76,9 @@ export default MenuItemDetail;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#1b1d21',
+    height: '50vh',
+    backgroundColor: 'red',
+    width: '100vw',
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
     marginHorizontal: 20,

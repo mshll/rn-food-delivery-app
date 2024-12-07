@@ -4,11 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import restaurants from '../data/restaurants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { renderStars } from '../utils/utils';
+import dishesBetterImages from '../data/dishesBetterImages';
 
 const MenuItemDetailHeader = ({ menuItem }) => {
   return (
     <View style={styles.container}>
-      <Image source={{ uri: menuItem.image }} style={styles.image} />
+      <Image source={dishesBetterImages[menuItem.name] || { uri: menuItem.image }} style={styles.image} />
     </View>
   );
 };
@@ -19,13 +20,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 0,
     justifyContent: 'center',
-    alignSelf: 'stretch',
-    backgroundColor: '#1b1d21',
+    alignSelf: 'center',
+    backgroundColor: 'transparent',
     height: '50%',
   },
   image: {
     flex: 1,
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     borderBottomEndRadius: 20,
     borderBottomStartRadius: 20,
   },

@@ -10,7 +10,8 @@ const CustomStatusBar = ({ children, statusBgColor = '#fff', barStyle = 'default
     <Fragment>
       <StatusBar backgroundColor={statusBgColor} barStyle={barStyle} />
       <View style={{ flex: 0, backgroundColor: statusBgColor, paddingTop: useTopPadding ? insets.top : 0 }} />
-      <View style={{ flex: 1, backgroundColor: bgColor, paddingBottom: insets.bottom }}>{children}</View>
+      <View style={{ flex: 1, backgroundColor: bgColor }}>{children}</View>
+      {/* <View style={{ flex: 1, backgroundColor: bgColor, paddingBottom: insets.bottom }}>{children}</View> */}
     </Fragment>
   );
 };

@@ -7,24 +7,24 @@ import { useCart } from '../context/CartContext';
 const CustomHeader = ({ navigation, title, route, absolute = true, backgroundColor = 'transparent', showLogo = false, ...props }) => {
   const insets = useSafeAreaInsets();
   const { cartItems } = useCart();
+  const isCartScreen = route?.name === 'Cart';
 
   const cartItemsCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
-  return (
-    <View style={[styles.header, { paddingTop: insets.top, backgroundColor }, absolute ? { position: 'absolute' } : { position: 'relative' }]}>
-      <View style={{ flex: 1, alignItems: 'flex-start' }}>
-        {navigation.canGoBack() && (
-          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
-            <Icon name="chevron-left" size={15} color="#d3e8d6" />
-          </TouchableOpacity>
-        )}
-      </View>
-      {showLogo && (
-        <View style={{ flex: 2, alignItems: 'center' }}>
-          <Text style={styles.title}>ZestZoom</Text>
-        </View>
-      )}
-      <View style={{ flex: 1, alignItems: 'flex-end' }}>
+  const renderLeftButton = () => {
+    if (navigation.canGoBack()) {
+      return (
+        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
+          <Icon name="chevron-left" size={15} color="#d3e8d6" />
+        </TouchableOpacity>
+      );
+    }
+    return null;
+  };
+
+  const renderRightButton = () => {
+    if (!isCartScreen) {
+      return (
         <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Cart')}>
           <Icon name="cart-shopping" size={15} color="#d3e8d6" />
           {cartItemsCount > 0 && (
@@ -33,7 +33,20 @@ const CustomHeader = ({ navigation, title, route, absolute = true, backgroundCol
             </View>
           )}
         </TouchableOpacity>
-      </View>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <View style={[styles.header, { paddingTop: insets.top, backgroundColor }, absolute ? { position: 'absolute' } : { position: 'relative' }]}>
+      <View style={styles.leftContainer}>{renderLeftButton()}</View>
+      {showLogo && (
+        <View style={styles.centerContainer}>
+          <Text style={styles.title}>ZestZoom</Text>
+        </View>
+      )}
+      <View style={styles.rightContainer}>{renderRightButton()}</View>
     </View>
   );
 };
@@ -43,10 +56,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    // position: 'absolute',
     top: 0,
     width: '100%',
     padding: 10,
+  },
+  leftContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  centerContainer: {
+    flex: 2,
+    alignItems: 'center',
+  },
+  rightContainer: {
+    flex: 1,
+    alignItems: 'flex-end',
   },
   title: {
     fontSize: 28,
