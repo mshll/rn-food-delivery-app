@@ -10,10 +10,10 @@ const RestaurantsPage = ({ navigation }) => {
   return (
     <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21" useTopPadding={false}>
       <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        {/* <ScrollView showsVerticalScrollIndicator={false}> */}
           <Categories setSelectedCategory={setSelectedCategory} selectedCategory={selectedCategory} />
           <RestaurantsList selectedCategory={selectedCategory} navigation={navigation} />
-        </ScrollView>
+        {/* </ScrollView> */}
       </View>
     </CustomStatusBar>
   );

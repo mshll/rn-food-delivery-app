@@ -63,7 +63,7 @@ const RestaurantsList = ({ selectedCategory, navigation }) => {
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ gap: 10, paddingHorizontal: 16 }}
-        scrollEnabled={false}
+        // scrollEnabled={false}
       />
     </View>
   );

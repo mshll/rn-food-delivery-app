@@ -36,19 +36,25 @@ const CustomHeader = ({
   };
 
   const renderRightButton = () => {
-    if (!isCartScreen) {
-      return (
-        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Cart')}>
-          <Icon name="cart-shopping" size={15} color="#d3e8d6" />
-          {cartItemsCount > 0 && (
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{cartItemsCount}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-      );
-    }
-    return null;
+    return (
+      <View style={styles.rightButtonsContainer}>
+        {isExploreScreen && (
+          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Map')}>
+            <Icon name="map-location-dot" size={15} color="#d3e8d6" />
+          </TouchableOpacity>
+        )}
+        {!isCartScreen && (
+          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Cart')}>
+            <Icon name="cart-shopping" size={15} color="#d3e8d6" />
+            {cartItemsCount > 0 && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>{cartItemsCount}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        )}
+      </View>
+    );
   };
 
   return (
@@ -88,6 +94,11 @@ const styles = StyleSheet.create({
   rightContainer: {
     flex: 1,
     alignItems: 'flex-end',
+  },
+  rightButtonsContainer: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
   },
   title: {
     fontSize: 28,

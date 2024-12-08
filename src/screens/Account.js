@@ -1,14 +1,15 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import CustomStatusBar from '../components/CustomStatusBar';
-import { recentOrders } from '../data/recentOrders';
 import { format } from 'date-fns';
 import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';
+import { useCart } from '../context/CartContext';
 
 const Account = () => {
   const favoriteRestaurants = restaurants.slice(0, 4).reverse();
   const navigation = useNavigation();
+  const { orders } = useCart();
 
   const renderFavoriteItem = (restaurant) => (
     <TouchableOpacity key={restaurant.id} style={styles.favoriteItem} onPress={() => navigation.navigate('RestaurantDetail', { restaurant })}>
@@ -71,8 +72,8 @@ const Account = () => {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Recent Orders</Text>
-          {recentOrders.length > 0 ? (
-            recentOrders.map(renderOrderItem)
+          {orders?.length > 0 ? (
+            orders.map(renderOrderItem)
           ) : (
             <View style={styles.emptyStateContainer}>
               <Text style={styles.emptyStateText}>No orders yet</Text>

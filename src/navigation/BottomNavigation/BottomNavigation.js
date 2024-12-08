@@ -23,7 +23,7 @@ const BottomNavigation = () => {
         name="Home"
         component={HomeNavigation}
         options={{
-          tabBarIcon: ({ color, size }) => <Icon name="house" size={size - 3} color={color} />,
+          tabBarIcon: ({ color, size }) => <Icon name="house-chimney" size={size - 3} color={color} />,
         }}
       />
       <Tab.Screen
@@ -39,7 +39,7 @@ const BottomNavigation = () => {
         component={HomeNavigation}
         initialParams={{ screen: 'Account' }}
         options={{
-          tabBarIcon: ({ color, size }) => <Icon name="user" size={size - 3} color={color} />,
+          tabBarIcon: ({ color, size }) => <Icon name="user-astronaut" size={size - 3} color={color} />,
         }}
       />
       {/* <Tab.Screen

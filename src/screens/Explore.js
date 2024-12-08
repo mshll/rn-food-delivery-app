@@ -31,19 +31,6 @@ const PopularDish = ({ item, onPress }) => (
 
 const Explore = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
-
-  // Get all menu items from all restaurants
-  const allMenuItems = useMemo(() => {
-    return restaurants.flatMap((restaurant) =>
-      restaurant.menuItems.map((item) => ({
-        ...item,
-        restaurantName: restaurant.name,
-        restaurantId: restaurant.id,
-      }))
-    );
-  }, []);
-
-  // Search functionality
   const searchResults = useMemo(() => {
     if (!searchQuery.trim()) return [];
 
@@ -73,7 +60,6 @@ const Explore = ({ navigation }) => {
     return results;
   }, [searchQuery]);
 
-  // Get popular dishes (using menu items from highly rated restaurants)
   const popularDishes = useMemo(() => {
     const topRestaurants = restaurants.filter((r) => r.rating >= 4.5).slice(0, 3);
     return topRestaurants
@@ -162,9 +148,6 @@ const Explore = ({ navigation }) => {
                 </TouchableOpacity>
               )}
             </View>
-            <Pressable style={styles.mapButton} onPress={() => navigation.navigate('Map')}>
-              <Icon name="map-location-dot" size={16} color="#d3e8d6" />
-            </Pressable>
           </View>
         </View>
 
@@ -174,11 +157,19 @@ const Explore = ({ navigation }) => {
             keyExtractor={(item, index) => `${item.type}-${item.item.id}-${index}`}
             contentContainerStyle={styles.searchResults}
             renderItem={renderSearchResult}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={() => (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 40, gap: 10 }}>
+                <Icon name="magnifying-glass" size={50} color="#797b89" style={{ marginBottom: 20 }} />
+                <Text style={styles.noResults}>No results found</Text>
+                <Text style={[styles.noResults, { fontSize: 14 }]}>Try searching for something else</Text>
+              </View>
+            )}
           />
         ) : (
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
             <View style={styles.quickSearchContainer}>
-              <Text style={styles.sectionTitle}>Quick Access</Text>
+              {/* <Text style={styles.sectionTitle}>Quick Access</Text> */}
               <View style={styles.quickSearchGrid}>
                 {quickSearchCategories.map((item, index) => (
                   <QuickSearchItem key={index} {...item} />
@@ -197,7 +188,7 @@ const Explore = ({ navigation }) => {
                       onPress={() =>
                         navigation.navigate('MenuItemDetail', {
                           menuItem: item,
-                          restaurantId: item.restaurantId,
+                          restaurant: restaurants.find((r) => r.id === item.restaurantId),
                         })
                       }
                     />
@@ -250,7 +241,6 @@ const styles = StyleSheet.create({
   searchBarContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
   },
   searchBar: {
     flex: 1,
@@ -460,5 +450,11 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  noResults: {
+    color: '#797b89',
+    fontSize: 16,
+    fontFamily: 'Poppins_400Regular',
+    textAlign: 'center',
   },
 });

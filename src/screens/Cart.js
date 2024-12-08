@@ -1,9 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View, FlatList, Alert } from 'react-native';
-import RestaurantMenu from '../components/RestaurantMenu';
 import CustomStatusBar from '../components/CustomStatusBar';
-import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import { useCart } from '../context/CartContext';
 import { useNavigation } from '@react-navigation/native';
@@ -52,11 +49,31 @@ const CartLayout = ({ children, footer }) => {
 };
 
 const Cart = () => {
-  const { cartItems, updateQuantity, getCartTotal, restaurant } = useCart();
+  const { cartItems, updateQuantity, getCartTotal, restaurant, clearCart, addOrder } = useCart();
   const navigation = useNavigation();
 
   const handlePayment = () => {
-    Alert.alert('Payment', 'Payment successful');
+    const newOrder = {
+      id: Date.now(),
+      restaurantName: restaurant.name,
+      date: new Date().toISOString(),
+      total: getCartTotal(),
+      status: 'Confirmed',
+      items: cartItems.map((item) => item.name),
+      restaurantImage: restaurant.image,
+    };
+
+    addOrder(newOrder);
+    clearCart();
+    navigation.navigate('OrderConfirmation', {
+      orderTotal: getCartTotal(),
+      items: cartItems.map((item) => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      restaurantName: restaurant.name,
+    });
   };
 
   const renderEmptyCart = () => (

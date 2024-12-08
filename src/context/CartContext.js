@@ -1,15 +1,21 @@
 import React, { createContext, useContext, useState } from 'react';
 import { Alert } from 'react-native';
+import { recentOrders as initialOrders } from '../data/recentOrders';
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [restaurant, setRestaurant] = useState(null);
+  const [orders, setOrders] = useState(initialOrders);
 
   const clearCart = () => {
     setCartItems([]);
     setRestaurant(null);
+  };
+
+  const addOrder = (newOrder) => {
+    setOrders((prevOrders) => [newOrder, ...prevOrders]);
   };
 
   const addToCart = (item, quantity, newRestaurant) => {
@@ -81,12 +87,14 @@ export const CartProvider = ({ children }) => {
       value={{
         cartItems,
         restaurant,
+        orders,
         addToCart,
         removeFromCart,
         updateQuantity,
         getCartTotal,
         getCartRestaurant,
         clearCart,
+        addOrder,
       }}
     >
       {children}
