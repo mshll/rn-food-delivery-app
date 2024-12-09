@@ -82,6 +82,39 @@ export const CartProvider = ({ children }) => {
     return restaurant;
   };
 
+  const handleCheckout = () => {
+    const newOrder = {
+      id: Date.now(),
+      restaurantName: restaurant.name,
+      date: new Date().toISOString(),
+      total: getCartTotal(),
+      status: 'In Progress...',
+      items: cartItems.map((item) => ({
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        image: dishesBetterImages[item.name] || item.image,
+      })),
+      restaurantImage: restaurant.image,
+    };
+
+    addOrder(newOrder);
+    navigation.navigate('OrderConfirmation', {
+      orderTotal: getCartTotal(),
+      items: cartItems.map((item) => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        image: dishesBetterImages[item.name] || item.image,
+      })),
+      restaurantName: restaurant.name,
+      restaurantImage: restaurant.image,
+      orderDate: new Date().toISOString(),
+      orderId: newOrder.id,
+    });
+    clearCart();
+  };
+
   return (
     <CartContext.Provider
       value={{

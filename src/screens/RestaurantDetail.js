@@ -23,7 +23,7 @@ const RestaurantDetail = ({ route }) => {
             <RestaurantMenu restaurant={restaurant} />
             {hasItemsInCart && isSameRestaurant && (
               <View style={styles.cartButton}>
-                <Button onPress={() => navigation.navigate('Cart')} bgColor="#f7ffae">
+                <Button onPress={() => navigation.navigate('Cart')}>
                   <View style={styles.cartButtonContent}>
                     <Text style={styles.cartButtonText}>View Cart</Text>
                     <Text style={styles.cartButtonText}>{getCartTotal()} KWD</Text>

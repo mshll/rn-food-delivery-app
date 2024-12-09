@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import CustomStatusBar from '../components/CustomStatusBar';
 import { format } from 'date-fns';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -9,6 +9,38 @@ import { getRestaurants } from '../api/restaurants';
 import { getProfile } from '../api/auth';
 import instance from '../api';
 import { useQuery } from '@tanstack/react-query';
+import { MotiView } from 'moti';
+import { Skeleton } from 'moti/skeleton';
+import OrderCard from '../components/OrderCard';
+
+const AccountSkeleton = () => (
+  <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
+    <LinearGradient colors={['#d3e8d6', '#1b1d21']} locations={[0.5, 0.5]} style={{ flex: 1 }}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <View style={{ flex: 1, backgroundColor: '#1b1d21' }}>
+          <View style={styles.profileSection}>
+            <Skeleton width={120} height={120} radius={60} colors={['#222429', '#282a2f']} />
+            <Skeleton width={150} height={24} radius={4} colors={['#222429', '#282a2f']} />
+            <Skeleton width={200} height={16} radius={4} colors={['#222429', '#282a2f']} />
+          </View>
+
+          <View style={styles.menuSection}>
+            <View style={styles.menuGroup}>
+              <Skeleton width="100%" height={60} radius={12} colors={['#222429', '#282a2f']} />
+              <Skeleton width="100%" height={60} radius={12} colors={['#222429', '#282a2f']} />
+              <Skeleton width="100%" height={60} radius={12} colors={['#222429', '#282a2f']} />
+            </View>
+
+            <View style={styles.menuGroup}>
+              <Skeleton width="100%" height={60} radius={12} colors={['#222429', '#282a2f']} />
+              <Skeleton width="100%" height={60} radius={12} colors={['#222429', '#282a2f']} />
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+    </LinearGradient>
+  </CustomStatusBar>
+);
 
 const Account = () => {
   const navigation = useNavigation();
@@ -38,18 +70,55 @@ const Account = () => {
     </TouchableOpacity>
   );
 
-  const renderOrderItem = (order) => (
-    <TouchableOpacity key={order.id} style={styles.orderItem}>
-      <View style={styles.orderHeader}>
-        <Text style={styles.orderRestaurant}>{order.restaurantName}</Text>
-        <Text style={styles.orderDate}>{format(new Date(order.date), 'MMM d, yyyy')}</Text>
-      </View>
-      <Text style={styles.orderItems}>{order.items.join(', ')}</Text>
-      <View style={styles.orderFooter}>
-        <Text style={styles.orderTotal}>{order.total.toFixed(3)} KWD</Text>
-        <Text style={[styles.orderStatus, { color: '#d3e8d6' }]}>{order.status}</Text>
-      </View>
-    </TouchableOpacity>
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case 'preparing':
+        return '#f9ffb733';
+      case 'ready':
+        return '#4CAF5033';
+      case 'on the way':
+        return '#2196F333';
+      case 'delivered':
+        return '#4CAF5033';
+      case 'cancelled':
+        return '#f4433633';
+      default:
+        return '#79798933';
+    }
+  };
+
+  const getStatusIcon = (status) => {
+    switch (status.toLowerCase()) {
+      case 'preparing':
+        return 'kitchen-set';
+      case 'ready':
+        return 'bell-concierge';
+      case 'on the way':
+        return 'motorcycle';
+      case 'delivered':
+        return 'circle-check';
+      case 'cancelled':
+        return 'circle-xmark';
+      default:
+        return 'circle-question';
+    }
+  };
+
+  const renderRecentOrders = () => (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>Recent Orders</Text>
+      {orders.length === 0 ? (
+        <View style={styles.emptyStateContainer}>
+          <Text style={styles.emptyStateText}>No orders yet</Text>
+        </View>
+      ) : (
+        <View style={styles.ordersContainer}>
+          {orders.map((order, index) => (
+            <OrderCard key={index} order={order} onPress={() => navigation.navigate('OrderDetails', { order })} />
+          ))}
+        </View>
+      )}
+    </View>
   );
 
   const renderMenuItem = (text) => (
@@ -62,13 +131,7 @@ const Account = () => {
   );
 
   if (isProfileLoading || isRestaurantsLoading) {
-    return (
-      <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
-        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-          <ActivityIndicator size="large" color="#d3e8d6" />
-        </View>
-      </CustomStatusBar>
-    );
+    return <AccountSkeleton />;
   }
 
   return (
@@ -104,16 +167,7 @@ const Account = () => {
             )}
           </View>
 
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Recent Orders</Text>
-            {orders?.length > 0 ? (
-              orders.map(renderOrderItem)
-            ) : (
-              <View style={styles.emptyStateContainer}>
-                <Text style={styles.emptyStateText}>No orders yet</Text>
-              </View>
-            )}
-          </View>
+          {renderRecentOrders()}
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Account Settings</Text>
@@ -202,46 +256,67 @@ const styles = StyleSheet.create({
   },
   orderItem: {
     backgroundColor: '#222429',
-    padding: 15,
     borderRadius: 12,
-    marginBottom: 10,
     borderWidth: 1,
     borderColor: '#282a2f',
+    overflow: 'hidden',
+  },
+  orderItemContent: {
+    flexDirection: 'row',
+    padding: 12,
+    gap: 12,
+  },
+  orderRestaurantImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+  },
+  orderInfo: {
+    flex: 1,
+    gap: 4,
   },
   orderHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    alignItems: 'center',
   },
-  orderRestaurant: {
-    color: '#d3e8d6',
+  orderRestaurantName: {
     fontSize: 16,
+    color: '#d3e8d6',
     fontFamily: 'Poppins_600SemiBold',
   },
-  orderDate: {
-    color: '#888',
-    fontSize: 14,
-    fontFamily: 'Poppins_400Regular',
-  },
-  orderItems: {
-    color: '#aaa',
-    fontSize: 14,
-    fontFamily: 'Poppins_400Regular',
-    marginBottom: 8,
-  },
-  orderFooter: {
+  orderDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  orderDate: {
+    fontSize: 12,
+    color: '#797b89',
+    fontFamily: 'Poppins_400Regular',
+  },
   orderTotal: {
+    fontSize: 14,
     color: '#d3e8d6',
-    fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
   },
-  orderStatus: {
-    fontSize: 14,
+  orderItemCount: {
+    fontSize: 12,
+    color: '#797b89',
     fontFamily: 'Poppins_500Medium',
+  },
+  orderStatusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  orderStatusText: {
+    fontSize: 10,
+    color: '#d3e8d6',
+    fontFamily: 'Poppins_500Medium',
+    textTransform: 'capitalize',
   },
   menuItem: {
     backgroundColor: '#222429',
@@ -283,5 +358,8 @@ const styles = StyleSheet.create({
   },
   avatarImage: {
     borderRadius: 60,
+  },
+  ordersContainer: {
+    gap: 8,
   },
 });

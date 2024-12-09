@@ -10,6 +10,7 @@ import Explore from '../../screens/Explore';
 import Account from '../../screens/Account';
 import MapScreen from '../../screens/MapScreen';
 import OrderConfirmation from '../../screens/OrderConfirmation';
+import OrderDetails from '../../screens/OrderDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +49,15 @@ export default function HomeNavigation() {
           backgroundColor: '#1b1d21',
           headerShown: false,
           gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="OrderDetails"
+        component={OrderDetails}
+        options={{
+          presentation: 'modal',
+          backgroundColor: '#1b1d21',
+          headerShown: false,
         }}
       />
       <Stack.Screen name="Login" component={Login} options={{}} />

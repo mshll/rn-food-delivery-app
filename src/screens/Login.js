@@ -18,6 +18,28 @@ import { login } from '../api/auth';
 import { setToken } from '../api/storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMutation } from '@tanstack/react-query';
+import { MotiView } from 'moti';
+
+const LoadingDots = () => (
+  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+    <Text style={{ color: '#1b1d21', fontSize: 16, fontFamily: 'Poppins_600SemiBold' }}>Signing in</Text>
+    {[0, 1, 2].map((index) => (
+      <MotiView
+        key={index}
+        from={{ opacity: 0.4 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          type: 'timing',
+          duration: 500,
+          loop: true,
+          delay: index * 150,
+        }}
+      >
+        <Text style={{ color: '#1b1d21', fontSize: 16, fontFamily: 'Poppins_600SemiBold' }}>.</Text>
+      </MotiView>
+    ))}
+  </View>
+);
 
 const Login = () => {
   const navigation = useNavigation();
@@ -47,38 +69,59 @@ const Login = () => {
       <View style={[styles.container, { paddingBottom: insets.bottom }]}>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={[styles.container]}>
           <ScrollView contentContainerStyle={styles.scrollContent} bounces={false} showsVerticalScrollIndicator={false}>
-            <View style={styles.mainSection}>
+            <MotiView
+              from={{ opacity: 0, translateY: 20 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ type: 'timing', duration: 300 }}
+              style={styles.mainSection}
+            >
               <View style={styles.header}>
                 <Text style={styles.title}>ZestZoom</Text>
                 <Text style={styles.subtitle}>Sign in to your account</Text>
               </View>
 
               <View style={styles.form}>
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Username"
-                    placeholderTextColor="#666"
-                    value={username}
-                    onChangeText={setUsername}
-                    autoCapitalize="none"
-                  />
-                </View>
+                <MotiView
+                  from={{ opacity: 0, translateX: -20 }}
+                  animate={{ opacity: 1, translateX: 0 }}
+                  transition={{ type: 'timing', duration: 300, delay: 100 }}
+                >
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Username"
+                      placeholderTextColor="#666"
+                      value={username}
+                      onChangeText={setUsername}
+                      autoCapitalize="none"
+                    />
+                  </View>
+                </MotiView>
 
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    placeholderTextColor="#666"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-                  />
-                </View>
+                <MotiView
+                  from={{ opacity: 0, translateX: -20 }}
+                  animate={{ opacity: 1, translateX: 0 }}
+                  transition={{ type: 'timing', duration: 300, delay: 200 }}
+                >
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Password"
+                      placeholderTextColor="#666"
+                      value={password}
+                      onChangeText={setPassword}
+                      secureTextEntry
+                    />
+                  </View>
+                </MotiView>
 
-                {error ? <Text style={styles.error}>Invalid username or password</Text> : null}
+                {error ? (
+                  <MotiView from={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}>
+                    <Text style={styles.error}>Invalid username or password</Text>
+                  </MotiView>
+                ) : null}
               </View>
-            </View>
+            </MotiView>
             <View style={styles.footer}>
               <Text style={styles.footerText}>Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
@@ -88,7 +131,9 @@ const Login = () => {
           </ScrollView>
 
           <View style={styles.buttonContainer}>
-            <Button title={isLoading ? 'Signing in...' : 'Sign in'} onPress={handleLogin} disabled={isLoading} />
+            <Button onPress={handleLogin} disabled={isLoading}>
+              {isLoading ? <LoadingDots /> : <Text style={styles.buttonText}>Sign in</Text>}
+            </Button>
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -166,6 +211,11 @@ const styles = StyleSheet.create({
   },
   link: {
     color: '#d3e8d6',
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  buttonText: {
+    color: '#1b1d21',
+    fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
   },
 });

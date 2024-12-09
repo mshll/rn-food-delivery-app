@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList, Pressable, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList, Pressable } from 'react-native';
 import CustomStatusBar from '../components/CustomStatusBar';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useState, useMemo, useEffect } from 'react';
@@ -6,27 +6,107 @@ import { getCategories } from '../api/categories';
 import { getRestaurants } from '../api/restaurants';
 import { recentOrders } from '../data/recentOrders';
 import dishesBetterImages from '../data/dishesBetterImages';
+import { MotiView } from 'moti';
+import { Skeleton } from 'moti/skeleton';
 
-const QuickSearchItem = ({ icon, label, count, onPress }) => (
-  <TouchableOpacity style={styles.quickSearchItem} onPress={onPress}>
-    <View style={styles.quickSearchIconContainer}>
-      <Icon name={icon} size={24} color="#485c48" />
-      {count ? <Text style={styles.quickSearchCount}>{count}</Text> : null}
-    </View>
-    <Text style={styles.quickSearchLabel}>{label}</Text>
-  </TouchableOpacity>
+const QuickSearchItem = ({ icon, label, count, onPress, index }) => (
+  <MotiView from={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: index * 100 }} style={styles.quickSearchItem}>
+    <TouchableOpacity onPress={onPress} style={styles.quickSearchButton}>
+      <View style={styles.quickSearchIconContainer}>
+        <Icon name={icon} size={24} color="#485c48" />
+        {count ? <Text style={styles.quickSearchCount}>{count}</Text> : null}
+      </View>
+      <Text style={styles.quickSearchLabel}>{label}</Text>
+    </TouchableOpacity>
+  </MotiView>
 );
 
-const PopularDish = ({ item, onPress }) => (
-  <TouchableOpacity style={styles.popularDishItem} onPress={onPress}>
-    <View style={styles.popularDishImageContainer}>
-      <Image source={dishesBetterImages[item.name] || { uri: item.image }} style={styles.popularDishImage} />
+const PopularDish = ({ item, onPress, index }) => (
+  <MotiView from={{ opacity: 0, translateY: 20 }} animate={{ opacity: 1, translateY: 0 }} transition={{ delay: index * 100 }}>
+    <TouchableOpacity style={styles.popularDishItem} onPress={onPress}>
+      <View style={styles.popularDishImageContainer}>
+        <Image source={dishesBetterImages[item.name] || { uri: item.image }} style={styles.popularDishImage} />
+      </View>
+      <View style={styles.popularDishContent}>
+        <Text style={styles.popularDishName}>{item.name}</Text>
+        <Text style={styles.popularDishPrice}>{item.price} KWD</Text>
+      </View>
+    </TouchableOpacity>
+  </MotiView>
+);
+
+const ExploreSkeleton = () => (
+  <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <View style={styles.searchBarContainer}>
+          <Skeleton width="100%" height={50} radius={25} colors={['#222429', '#282a2f']} />
+        </View>
+      </View>
+
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        <View style={styles.quickSearchContainer}>
+          <View style={styles.quickSearchGrid}>
+            {[1, 2, 3, 4].map((i) => (
+              <View key={i} style={styles.quickSearchItem}>
+                <MotiView from={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 100 }}>
+                  <View style={styles.quickSearchButton}>
+                    <Skeleton width="100%" height={100} radius={16} colors={['#282a2f', '#282a2f']} />
+                    <Skeleton width={80} height={20} radius={4} colors={['#282a2f', '#282a2f']} />
+                  </View>
+                </MotiView>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        <View style={styles.popularDishesContainer}>
+          <Skeleton width={150} height={24} radius={4} colors={['#282a2f', '#282a2f']} style={{ marginBottom: 20, marginLeft: 16 }} />
+          <View style={styles.popularDishesWrapper}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.popularDishesScroll}>
+              {[1, 2, 3].map((i) => (
+                <MotiView
+                  key={i}
+                  from={{ opacity: 0, translateY: 20 }}
+                  animate={{ opacity: 1, translateY: 0 }}
+                  transition={{ delay: i * 100 }}
+                  style={styles.popularDishItem}
+                >
+                  <View style={styles.popularDishImageContainer}>
+                    <Skeleton width={100} height={100} radius={50} colors={['#282a2f', '#282a2f']} />
+                  </View>
+                  <View style={styles.popularDishContent}>
+                    <Skeleton width={100} height={20} radius={4} colors={['#282a2f', '#282a2f']} />
+                    <Skeleton width={60} height={16} radius={4} colors={['#282a2f', '#282a2f']} style={{ marginTop: 8 }} />
+                  </View>
+                </MotiView>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
+
+        <View style={styles.topRatedContainer}>
+          <Skeleton width={200} height={24} radius={4} colors={['#282a2f', '#282a2f']} style={{ marginBottom: 20, marginLeft: 16 }} />
+          {[1, 2, 3].map((i) => (
+            <MotiView
+              key={i}
+              from={{ opacity: 0, translateX: -20 }}
+              animate={{ opacity: 1, translateX: 0 }}
+              transition={{ delay: i * 100 }}
+              style={[styles.topRatedItem, { marginHorizontal: 16 }]}
+            >
+              <Skeleton width={100} height={100} radius={10} colors={['#282a2f', '#282a2f']} />
+              <View style={styles.topRatedContent}>
+                <Skeleton width={150} height={20} radius={4} colors={['#282a2f', '#282a2f']} />
+                <Skeleton width={100} height={16} radius={4} colors={['#282a2f', '#282a2f']} style={{ marginTop: 8 }} />
+                <Skeleton width={120} height={16} radius={4} colors={['#282a2f', '#282a2f']} style={{ marginTop: 8 }} />
+              </View>
+            </MotiView>
+          ))}
+        </View>
+      </ScrollView>
     </View>
-    <View style={styles.popularDishContent}>
-      <Text style={styles.popularDishName}>{item.name}</Text>
-      <Text style={styles.popularDishPrice}>{item.price} KWD</Text>
-    </View>
-  </TouchableOpacity>
+  </CustomStatusBar>
 );
 
 const Explore = ({ navigation }) => {
@@ -119,46 +199,44 @@ const Explore = ({ navigation }) => {
     },
   ];
 
-  const renderSearchResult = ({ item }) => {
+  const renderSearchResult = ({ item, index }) => {
     if (item.type === 'menuItem') {
       return (
-        <TouchableOpacity
-          style={styles.searchResultItem}
-          onPress={() =>
-            navigation.navigate('MenuItemDetail', {
-              menuItem: item.item,
-              restaurantId: item.item.restaurantId,
-            })
-          }
-        >
-          <Image source={{ uri: item.item.image }} style={styles.searchResultImage} />
-          <View style={styles.searchResultContent}>
-            <Text style={styles.searchResultTitle}>{item.item.name}</Text>
-            <Text style={styles.searchResultSubtitle}>From {item.item.restaurantName}</Text>
-          </View>
-        </TouchableOpacity>
+        <MotiView from={{ opacity: 0, translateX: -20 }} animate={{ opacity: 1, translateX: 0 }} transition={{ delay: index * 100 }}>
+          <TouchableOpacity
+            style={styles.searchResultItem}
+            onPress={() =>
+              navigation.navigate('MenuItemDetail', {
+                menuItem: item.item,
+                restaurant: restaurants.find((r) => r._id === item.item.restaurantId),
+              })
+            }
+          >
+            <Image source={dishesBetterImages[item.item.name] || { uri: item.item.image }} style={styles.searchResultImage} />
+            <View style={styles.searchResultContent}>
+              <Text style={styles.searchResultTitle}>{item.item.name}</Text>
+              <Text style={styles.searchResultSubtitle}>From {item.item.restaurantName}</Text>
+            </View>
+          </TouchableOpacity>
+        </MotiView>
       );
     }
 
     return (
-      <TouchableOpacity style={styles.searchResultItem} onPress={() => navigation.navigate('RestaurantDetail', { restaurant: item.item })}>
-        <Image source={{ uri: item.item.image }} style={styles.searchResultImage} />
-        <View style={styles.searchResultContent}>
-          <Text style={styles.searchResultTitle}>{item.item.name}</Text>
-          <Text style={styles.searchResultSubtitle}>{item.item.category.name}</Text>
-        </View>
-      </TouchableOpacity>
+      <MotiView from={{ opacity: 0, translateX: -20 }} animate={{ opacity: 1, translateX: 0 }} transition={{ delay: index * 100 }}>
+        <TouchableOpacity style={styles.searchResultItem} onPress={() => navigation.navigate('RestaurantDetail', { restaurant: item.item })}>
+          <Image source={{ uri: item.item.image }} style={styles.searchResultImage} />
+          <View style={styles.searchResultContent}>
+            <Text style={styles.searchResultTitle}>{item.item.name}</Text>
+            <Text style={styles.searchResultSubtitle}>{item.item.category.name}</Text>
+          </View>
+        </TouchableOpacity>
+      </MotiView>
     );
   };
 
   if (loading) {
-    return (
-      <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
-        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-          <ActivityIndicator size="large" color="#d3e8d6" />
-        </View>
-      </CustomStatusBar>
-    );
+    return <ExploreSkeleton />;
   }
 
   return (
@@ -176,9 +254,16 @@ const Explore = ({ navigation }) => {
                 onChangeText={setSearchQuery}
               />
               {searchQuery.length > 0 && (
-                <TouchableOpacity onPress={() => setSearchQuery('')}>
-                  <Icon name="xmark" size={20} color="#666" style={styles.clearIcon} />
-                </TouchableOpacity>
+                <MotiView
+                  from={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0 }}
+                  transition={{ type: 'spring' }}
+                >
+                  <TouchableOpacity onPress={() => setSearchQuery('')}>
+                    <Icon name="xmark" size={20} color="#666" style={styles.clearIcon} />
+                  </TouchableOpacity>
+                </MotiView>
               )}
             </View>
           </View>
@@ -192,20 +277,23 @@ const Explore = ({ navigation }) => {
             renderItem={renderSearchResult}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={() => (
-              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 40, gap: 10 }}>
+              <MotiView
+                from={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 40, gap: 10 }}
+              >
                 <Icon name="magnifying-glass" size={50} color="#797b89" style={{ marginBottom: 20 }} />
                 <Text style={styles.noResults}>No results found</Text>
                 <Text style={[styles.noResults, { fontSize: 14 }]}>Try searching for something else</Text>
-              </View>
+              </MotiView>
             )}
           />
         ) : (
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
             <View style={styles.quickSearchContainer}>
-              {/* <Text style={styles.sectionTitle}>Quick Access</Text> */}
               <View style={styles.quickSearchGrid}>
                 {quickSearchCategories.map((item, index) => (
-                  <QuickSearchItem key={index} {...item} />
+                  <QuickSearchItem key={index} {...item} index={index} />
                 ))}
               </View>
             </View>
@@ -218,6 +306,7 @@ const Explore = ({ navigation }) => {
                     <PopularDish
                       key={index}
                       item={item}
+                      index={index}
                       onPress={() =>
                         navigation.navigate('MenuItemDetail', {
                           menuItem: item,
@@ -236,18 +325,25 @@ const Explore = ({ navigation }) => {
                 .filter((r) => r.rating >= 4.5)
                 .slice(0, 3)
                 .map((restaurant, index) => (
-                  <TouchableOpacity key={index} style={styles.topRatedItem} onPress={() => navigation.navigate('RestaurantDetail', { restaurant })}>
-                    <Image source={{ uri: restaurant.image }} style={styles.topRatedImage} />
-                    <View style={styles.topRatedContent}>
-                      <Text style={styles.topRatedTitle}>{restaurant.name}</Text>
-                      <Text style={styles.topRatedCategory}>{restaurant.category.name}</Text>
-                      <View style={styles.ratingContainer}>
-                        <Icon name="star" solid size={16} color="#d3e8d6" />
-                        <Text style={styles.ratingText}>{restaurant.rating}</Text>
-                        <Text style={styles.deliveryTime}> • {restaurant.deliveryTime}</Text>
+                  <MotiView
+                    key={index}
+                    from={{ opacity: 0, translateX: -20 }}
+                    animate={{ opacity: 1, translateX: 0 }}
+                    transition={{ delay: index * 100 }}
+                  >
+                    <TouchableOpacity style={styles.topRatedItem} onPress={() => navigation.navigate('RestaurantDetail', { restaurant })}>
+                      <Image source={{ uri: restaurant.image }} style={styles.topRatedImage} />
+                      <View style={styles.topRatedContent}>
+                        <Text style={styles.topRatedTitle}>{restaurant.name}</Text>
+                        <Text style={styles.topRatedCategory}>{restaurant.category.name}</Text>
+                        <View style={styles.ratingContainer}>
+                          <Icon name="star" solid size={16} color="#d3e8d6" />
+                          <Text style={styles.ratingText}>{restaurant.rating}</Text>
+                          <Text style={styles.deliveryTime}> • {restaurant.deliveryTime}</Text>
+                        </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
+                    </TouchableOpacity>
+                  </MotiView>
                 ))}
             </View>
           </ScrollView>
@@ -319,9 +415,14 @@ const styles = StyleSheet.create({
     width: '50%',
     padding: 8,
   },
+  quickSearchButton: {
+    alignItems: 'center',
+    gap: 8,
+  },
   quickSearchIconContainer: {
     backgroundColor: '#d3e8d6',
     borderRadius: 16,
+    width: '100%',
     height: 100,
     alignItems: 'center',
     justifyContent: 'center',
@@ -329,8 +430,8 @@ const styles = StyleSheet.create({
   },
   quickSearchCount: {
     position: 'absolute',
-    top: 12,
-    right: 12,
+    top: 10,
+    right: 10,
     backgroundColor: '#485c48',
     color: '#d3e8d6',
     fontSize: 12,
@@ -344,7 +445,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Poppins_500Medium',
     textAlign: 'center',
-    marginTop: 8,
   },
   popularDishesContainer: {
     marginBottom: 24,

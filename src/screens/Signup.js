@@ -21,6 +21,28 @@ import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useMutation } from '@tanstack/react-query';
+import { MotiView } from 'moti';
+
+const LoadingDots = () => (
+  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+    <Text style={{ color: '#1b1d21', fontSize: 16, fontFamily: 'Poppins_600SemiBold' }}>Creating account</Text>
+    {[0, 1, 2].map((index) => (
+      <MotiView
+        key={index}
+        from={{ opacity: 0.4 }}
+        animate={{ opacity: 1 }}
+        transition={{
+          type: 'timing',
+          duration: 500,
+          loop: true,
+          delay: index * 150,
+        }}
+      >
+        <Text style={{ color: '#1b1d21', fontSize: 16, fontFamily: 'Poppins_600SemiBold' }}>.</Text>
+      </MotiView>
+    ))}
+  </View>
+);
 
 const Signup = () => {
   const navigation = useNavigation();
@@ -93,66 +115,100 @@ const Signup = () => {
       <View style={[styles.container, { paddingBottom: insets.bottom }]}>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={[styles.container]}>
           <ScrollView contentContainerStyle={styles.scrollContent} bounces={false} showsVerticalScrollIndicator={false}>
-            <View style={styles.mainSection}>
+            <MotiView
+              from={{ opacity: 0, translateY: 20 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ type: 'timing', duration: 300 }}
+              style={styles.mainSection}
+            >
               <View style={styles.header}>
                 <Text style={styles.title}>ZestZoom</Text>
                 <Text style={styles.subtitle}>Create your new account</Text>
               </View>
 
               <View style={styles.form}>
-                <View style={styles.imagePickerContainer}>
-                  <TouchableOpacity onPress={pickImage}>
-                    <View style={styles.imagePlaceholder}>
-                      {image ? (
-                        <Image source={{ uri: image.uri }} style={styles.profileImage} />
-                      ) : (
-                        <Icon name="user-astronaut" size={40} color="#666" />
-                      )}
-                    </View>
-                    {!image && (
-                      <View style={styles.plusIconContainer}>
-                        <Icon name="plus" size={12} color="#1b1d21" />
+                <MotiView from={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: 'timing', duration: 300 }}>
+                  <View style={styles.imagePickerContainer}>
+                    <TouchableOpacity onPress={pickImage}>
+                      <View style={styles.imagePlaceholder}>
+                        {image ? (
+                          <Image source={{ uri: image.uri }} style={styles.profileImage} />
+                        ) : (
+                          <Icon name="user-astronaut" size={40} color="#666" />
+                        )}
                       </View>
-                    )}
-                  </TouchableOpacity>
-                </View>
+                      {!image && (
+                        <MotiView
+                          from={{ opacity: 0, scale: 0 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ type: 'spring', delay: 300 }}
+                          style={styles.plusIconContainer}
+                        >
+                          <Icon name="plus" size={12} color="#1b1d21" />
+                        </MotiView>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                </MotiView>
 
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Username"
-                    placeholderTextColor="#666"
-                    value={username}
-                    onChangeText={setUsername}
-                    autoCapitalize="none"
-                  />
-                </View>
+                <MotiView
+                  from={{ opacity: 0, translateX: -20 }}
+                  animate={{ opacity: 1, translateX: 0 }}
+                  transition={{ type: 'timing', duration: 300, delay: 100 }}
+                >
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Username"
+                      placeholderTextColor="#666"
+                      value={username}
+                      onChangeText={setUsername}
+                      autoCapitalize="none"
+                    />
+                  </View>
+                </MotiView>
 
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    placeholderTextColor="#666"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-                  />
-                </View>
+                <MotiView
+                  from={{ opacity: 0, translateX: -20 }}
+                  animate={{ opacity: 1, translateX: 0 }}
+                  transition={{ type: 'timing', duration: 300, delay: 200 }}
+                >
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Password"
+                      placeholderTextColor="#666"
+                      value={password}
+                      onChangeText={setPassword}
+                      secureTextEntry
+                    />
+                  </View>
+                </MotiView>
 
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Confirm Password"
-                    placeholderTextColor="#666"
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
-                    secureTextEntry
-                  />
-                </View>
+                <MotiView
+                  from={{ opacity: 0, translateX: -20 }}
+                  animate={{ opacity: 1, translateX: 0 }}
+                  transition={{ type: 'timing', duration: 300, delay: 300 }}
+                >
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.input}
+                      placeholder="Confirm Password"
+                      placeholderTextColor="#666"
+                      value={confirmPassword}
+                      onChangeText={setConfirmPassword}
+                      secureTextEntry
+                    />
+                  </View>
+                </MotiView>
 
-                {displayError ? <Text style={styles.error}>{displayError}</Text> : null}
+                {displayError ? (
+                  <MotiView from={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}>
+                    <Text style={styles.error}>{displayError}</Text>
+                  </MotiView>
+                ) : null}
               </View>
-            </View>
+            </MotiView>
             <View style={styles.footer}>
               <Text style={styles.footerText}>Already have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -162,7 +218,9 @@ const Signup = () => {
           </ScrollView>
 
           <View style={styles.buttonContainer}>
-            <Button title={isLoading ? 'Creating account...' : 'Create account'} onPress={handleSignup} disabled={isLoading} bgColor="#d3e8d6" />
+            <Button onPress={handleSignup} disabled={isLoading}>
+              {isLoading ? <LoadingDots /> : <Text style={styles.buttonText}>Create account</Text>}
+            </Button>
           </View>
         </KeyboardAvoidingView>
       </View>
@@ -273,6 +331,11 @@ const styles = StyleSheet.create({
   },
   link: {
     color: '#d3e8d6',
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  buttonText: {
+    color: '#1b1d21',
+    fontSize: 16,
     fontFamily: 'Poppins_600SemiBold',
   },
 });
