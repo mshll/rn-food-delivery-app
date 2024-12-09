@@ -3,6 +3,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/Feather';
 import { renderStars } from '../utils/utils';
+import { getRestaurants } from '../api/restaurants';
+import { useQuery } from '@tanstack/react-query';
 
 const RestaurantsList = ({ selectedCategory, navigation }) => {
   const filteredRestaurants = selectedCategory ? restaurants.filter((item) => item.category === selectedCategory) : restaurants;
@@ -86,8 +88,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingTop: 16,
-    paddingBottom: 10,
+    paddingTop: 14,
+    paddingBottom: 5,
   },
   headerText: {
     backgroundColor: '#1b1d21',

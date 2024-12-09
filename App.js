@@ -1,6 +1,7 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { CartProvider } from './src/context/CartContext';
-import HomeNavigation from './src/navigation/HomeNavigation/HomeNavigation';
+import AuthNavigation from './src/navigation/AuthNavigation.js/AuthNavigation';
+import BottomNavigation from './src/navigation/BottomNavigation/BottomNavigation';
 
 import {
   useFonts,
@@ -10,7 +11,13 @@ import {
   Poppins_700Bold,
   Poppins_800ExtraBold,
 } from '@expo-google-fonts/poppins';
-import BottomNavigation from './src/navigation/BottomNavigation/BottomNavigation';
+import { UserProvider, useUser } from './src/context/UserContext';
+
+const Navigation = () => {
+  const { userAuthenticated } = useUser();
+
+  return <>{userAuthenticated ? <BottomNavigation /> : <AuthNavigation />}</>;
+};
 
 export default function App() {
   let [fontLoaded] = useFonts({
@@ -26,10 +33,12 @@ export default function App() {
   }
 
   return (
-    <CartProvider>
-      <NavigationContainer>
-        <BottomNavigation />
-      </NavigationContainer>
-    </CartProvider>
+    <NavigationContainer>
+      <CartProvider>
+        <UserProvider>
+          <Navigation />
+        </UserProvider>
+      </CartProvider>
+    </NavigationContainer>
   );
 }

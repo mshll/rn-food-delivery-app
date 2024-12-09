@@ -1,10 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View, Dimensions, Pressable, Alert } from 'react-native';
 import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler';
 import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring, runOnJS } from 'react-native-reanimated';
-import RestaurantMenu from '../components/RestaurantMenu';
-import CustomStatusBar from '../components/CustomStatusBar';
 import MenuItemDetailHeader from '../components/MenuItemDetailHeader';
-import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useEffect, useState } from 'react';
 import Button from '../components/Button';

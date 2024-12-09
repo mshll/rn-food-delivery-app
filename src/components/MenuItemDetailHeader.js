@@ -1,9 +1,4 @@
 import { StyleSheet, Text, View, FlatList, ImageBackground, Image, Dimensions } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import restaurants from '../data/restaurants';
-import { LinearGradient } from 'expo-linear-gradient';
-import { renderStars } from '../utils/utils';
 import dishesBetterImages from '../data/dishesBetterImages';
 
 const { width } = Dimensions.get('window');

@@ -1,9 +1,5 @@
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { renderStars } from '../utils/utils';
-import Button from './Button';
 import { useNavigation } from '@react-navigation/native';
 import dishesBetterImages from '../data/dishesBetterImages';
 

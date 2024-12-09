@@ -1,7 +1,5 @@
 import { StyleSheet, Text, View, FlatList, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import restaurants from '../data/restaurants';
 import { LinearGradient } from 'expo-linear-gradient';
 import { renderStars } from '../utils/utils';
 

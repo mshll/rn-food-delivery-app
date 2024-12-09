@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     backgroundColor: '#222429',
-    borderRadius: 14,
+    borderRadius: 40,
     width: 40,
     height: 40,
     alignItems: 'center',
