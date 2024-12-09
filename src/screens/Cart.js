@@ -58,7 +58,7 @@ const Cart = () => {
       restaurantName: restaurant.name,
       date: new Date().toISOString(),
       total: getCartTotal(),
-      status: 'Confirmed',
+      status: 'In Progress...',
       items: cartItems.map((item) => item.name),
       restaurantImage: restaurant.image,
     };

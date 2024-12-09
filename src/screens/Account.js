@@ -5,6 +5,7 @@ import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';
 import { useCart } from '../context/CartContext';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Account = () => {
   const favoriteRestaurants = restaurants.slice(0, 4).reverse();
@@ -45,49 +46,53 @@ const Account = () => {
 
   return (
     <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.profileSection}>
-          <Image source={{ uri: 'https://github.com/mshll.png' }} style={styles.avatar} />
-          <Text style={styles.username}>Meshal Almutairi</Text>
-          <Text style={styles.profileSubText}>meshal@me.com</Text>
-        </View>
-
-        <View style={styles.favoritesSection}>
-          <Text style={[styles.sectionTitle, { paddingHorizontal: 20 }]}>Go-To Restaurants</Text>
-          {favoriteRestaurants.length > 0 ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.favoritesScroll}
-              contentContainerStyle={styles.favoritesScrollContent}
-            >
-              {favoriteRestaurants.map(renderFavoriteItem)}
-            </ScrollView>
-          ) : (
-            <View style={styles.emptyStateContainer}>
-              <Text style={styles.emptyStateText}>You haven't liked any restaurants yet</Text>
+      <LinearGradient colors={['#d3e8d6', '#1b1d21']} locations={[0.5, 0.5]} style={{ flex: 1 }}>
+        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+          <View style={{ flex: 1, backgroundColor: '#1b1d21' }}>
+            <View style={styles.profileSection}>
+              <Image source={{ uri: 'https://github.com/mshll.png' }} style={styles.avatar} />
+              <Text style={styles.username}>Meshal Almutairi</Text>
+              <Text style={styles.profileSubText}>meshal@me.com</Text>
             </View>
-          )}
-        </View>
+          </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Recent Orders</Text>
-          {orders?.length > 0 ? (
-            orders.map(renderOrderItem)
-          ) : (
-            <View style={styles.emptyStateContainer}>
-              <Text style={styles.emptyStateText}>No orders yet</Text>
-            </View>
-          )}
-        </View>
+          <View style={styles.favoritesSection}>
+            <Text style={[styles.sectionTitle, { paddingHorizontal: 20 }]}>Go-To Restaurants</Text>
+            {favoriteRestaurants.length > 0 ? (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={styles.favoritesScroll}
+                contentContainerStyle={styles.favoritesScrollContent}
+              >
+                {favoriteRestaurants.map(renderFavoriteItem)}
+              </ScrollView>
+            ) : (
+              <View style={styles.emptyStateContainer}>
+                <Text style={styles.emptyStateText}>You haven't liked any restaurants yet</Text>
+              </View>
+            )}
+          </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Account Settings</Text>
-          {renderMenuItem('Addresses')}
-          {renderMenuItem('Payment Methods')}
-          {renderMenuItem('Settings')}
-        </View>
-      </ScrollView>
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Recent Orders</Text>
+            {orders?.length > 0 ? (
+              orders.map(renderOrderItem)
+            ) : (
+              <View style={styles.emptyStateContainer}>
+                <Text style={styles.emptyStateText}>No orders yet</Text>
+              </View>
+            )}
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Account Settings</Text>
+            {renderMenuItem('Addresses')}
+            {renderMenuItem('Payment Methods')}
+            {renderMenuItem('Settings')}
+          </View>
+        </ScrollView>
+      </LinearGradient>
     </CustomStatusBar>
   );
 };
@@ -97,7 +102,7 @@ export default Account;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1b1d21',
+    // backgroundColor: '#1b1d21',
   },
   profileSection: {
     alignItems: 'center',
@@ -128,9 +133,11 @@ const styles = StyleSheet.create({
   section: {
     paddingHorizontal: 20,
     paddingTop: 20,
+    backgroundColor: '#1b1d21',
   },
   favoritesSection: {
     paddingTop: 20,
+    backgroundColor: '#1b1d21',
   },
   sectionTitle: {
     fontSize: 18,

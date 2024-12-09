@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import Button from '../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import { useCart } from '../context/CartContext';
+import { BlurView } from 'expo-blur';
 
 const { height, width } = Dimensions.get('window');
 
@@ -63,7 +64,9 @@ const MenuItemDetail = ({ route }) => {
 
   return (
     <View style={styles.modalContainer}>
-      <TouchableOpacity style={styles.dismissOverlay} activeOpacity={1} onPress={() => navigation.goBack()} />
+      <BlurView intensity={30} tint="systemChromeMaterialDark" style={styles.dismissOverlay}>
+        <TouchableOpacity style={styles.dismissOverlay} activeOpacity={1} onPress={() => navigation.goBack()} />
+      </BlurView>
 
       <View style={styles.emptySpace} />
 
@@ -113,7 +116,6 @@ export default MenuItemDetail;
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   dismissOverlay: {
     ...StyleSheet.absoluteFillObject,

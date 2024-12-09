@@ -19,7 +19,7 @@ const RestaurantsList = ({ selectedCategory, navigation }) => {
                 color: '#d3e8d6',
                 paddingVertical: 4,
                 paddingHorizontal: 10,
-                borderRadius: 500,
+                borderRadius: 14,
                 fontSize: 10,
                 fontWeight: '600',
                 position: 'absolute',

@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-    // borderRadius: 100,
+    borderRadius: 14,
   },
   headerSubText: {
     backgroundColor: '#1b1d21',
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
     fontWeight: 'bold',
     fontSize: 24,
-    borderRadius: 12,
+    borderRadius: 14,
     marginLeft: 10,
   },
   selectedItem: {
