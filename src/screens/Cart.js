@@ -14,11 +14,11 @@ const CartItem = ({ item, onUpdateQuantity }) => (
       <Text style={{ color: '#797b89', fontSize: 14 }}>{Number((item.price * item.quantity).toFixed(2))} KWD</Text>
     </View>
     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 15 }}>
-      <TouchableOpacity style={styles.icon} onPress={() => onUpdateQuantity(item.id, item.quantity - 1)}>
+      <TouchableOpacity style={styles.icon} onPress={() => onUpdateQuantity(item._id, item.quantity - 1)}>
         <Icon name="minus" size={16} color="#d8e6ea" />
       </TouchableOpacity>
       <Text style={{ color: '#d3e8d6', fontSize: 16, fontWeight: 'bold' }}>{item.quantity}</Text>
-      <TouchableOpacity style={styles.icon} onPress={() => onUpdateQuantity(item.id, item.quantity + 1)}>
+      <TouchableOpacity style={styles.icon} onPress={() => onUpdateQuantity(item._id, item.quantity + 1)}>
         <Icon name="plus" size={16} color="#d8e6ea" />
       </TouchableOpacity>
     </View>
@@ -90,7 +90,7 @@ const Cart = () => {
       <FlatList
         data={cartItems}
         renderItem={({ item }) => <CartItem item={item} onUpdateQuantity={updateQuantity} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         showsVerticalScrollIndicator={false}
         ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
         contentContainerStyle={{ flex: 1 }}

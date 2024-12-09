@@ -20,7 +20,7 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (item, quantity, newRestaurant) => {
     return new Promise((resolve) => {
-      if (restaurant && newRestaurant.id !== restaurant.id) {
+      if (restaurant && newRestaurant._id !== restaurant._id) {
         Alert.alert(
           'Clear Cart?',
           `Your cart contains items from ${restaurant.name}. Would you like to clear it and add items from ${newRestaurant.name}?`,
@@ -47,9 +47,9 @@ export const CartProvider = ({ children }) => {
       if (!restaurant) setRestaurant(newRestaurant);
 
       setCartItems((prevItems) => {
-        const existingItem = prevItems.find((i) => i.id === item.id);
+        const existingItem = prevItems.find((i) => i._id === item._id);
         if (existingItem) {
-          return prevItems.map((i) => (i.id === item.id ? { ...i, quantity: i.quantity + quantity } : i));
+          return prevItems.map((i) => (i._id === item._id ? { ...i, quantity: i.quantity + quantity } : i));
         }
         return [...prevItems, { ...item, quantity }];
       });
@@ -59,7 +59,7 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = (itemId) => {
     setCartItems((prevItems) => {
-      const newItems = prevItems.filter((item) => item.id !== itemId);
+      const newItems = prevItems.filter((item) => item._id !== itemId);
       if (newItems.length === 0) setRestaurant(null);
       return newItems;
     });
@@ -71,7 +71,7 @@ export const CartProvider = ({ children }) => {
       return;
     }
     if (quantity > 10) quantity = 10;
-    setCartItems((prevItems) => prevItems.map((item) => (item.id === itemId ? { ...item, quantity } : item)));
+    setCartItems((prevItems) => prevItems.map((item) => (item._id === itemId ? { ...item, quantity } : item)));
   };
 
   const getCartTotal = () => {

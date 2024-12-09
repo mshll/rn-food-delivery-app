@@ -2,7 +2,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { CartProvider } from './src/context/CartContext';
 import AuthNavigation from './src/navigation/AuthNavigation.js/AuthNavigation';
 import BottomNavigation from './src/navigation/BottomNavigation/BottomNavigation';
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { UserProvider, useUser } from './src/context/UserContext';
 import {
   useFonts,
   Poppins_400Regular,
@@ -11,7 +12,8 @@ import {
   Poppins_700Bold,
   Poppins_800ExtraBold,
 } from '@expo-google-fonts/poppins';
-import { UserProvider, useUser } from './src/context/UserContext';
+
+const queryClient = new QueryClient();
 
 const Navigation = () => {
   const { userAuthenticated } = useUser();
@@ -27,18 +29,17 @@ export default function App() {
     Poppins_700Bold,
     Poppins_800ExtraBold,
   });
-
-  if (!fontLoaded) {
-    return null;
-  }
+  if (!fontLoaded) return null;
 
   return (
-    <NavigationContainer>
-      <CartProvider>
-        <UserProvider>
-          <Navigation />
-        </UserProvider>
-      </CartProvider>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <CartProvider>
+          <UserProvider>
+            <Navigation />
+          </UserProvider>
+        </CartProvider>
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }

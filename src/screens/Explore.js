@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList, Pressable } from 'react-native';
+import { StyleSheet, Text, View, TextInput, ScrollView, TouchableOpacity, Image, FlatList, Pressable, ActivityIndicator } from 'react-native';
 import CustomStatusBar from '../components/CustomStatusBar';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { useState, useMemo } from 'react';
-import restaurants from '../data/restaurants';
-import restaurantCategories from '../data/categories';
+import { useState, useMemo, useEffect } from 'react';
+import { getCategories } from '../api/categories';
+import { getRestaurants } from '../api/restaurants';
 import { recentOrders } from '../data/recentOrders';
 import dishesBetterImages from '../data/dishesBetterImages';
 
@@ -11,7 +11,7 @@ const QuickSearchItem = ({ icon, label, count, onPress }) => (
   <TouchableOpacity style={styles.quickSearchItem} onPress={onPress}>
     <View style={styles.quickSearchIconContainer}>
       <Icon name={icon} size={24} color="#485c48" />
-      {count && <Text style={styles.quickSearchCount}>{count}</Text>}
+      {count ? <Text style={styles.quickSearchCount}>{count}</Text> : null}
     </View>
     <Text style={styles.quickSearchLabel}>{label}</Text>
   </TouchableOpacity>
@@ -31,6 +31,29 @@ const PopularDish = ({ item, onPress }) => (
 
 const Explore = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [restaurants, setRestaurants] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [dishesBetterImages, setDishesBetterImages] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const categoriesData = await getCategories();
+      const restaurantsData = await getRestaurants();
+      const recentOrdersData = recentOrders;
+      const dishesBetterImagesData = dishesBetterImages;
+
+      setCategories(categoriesData);
+      setRestaurants(restaurantsData);
+      setRecentOrders(recentOrdersData);
+      setDishesBetterImages(dishesBetterImagesData);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
   const searchResults = useMemo(() => {
     if (!searchQuery.trim()) return [];
 
@@ -39,7 +62,7 @@ const Explore = ({ navigation }) => {
 
     // Search in restaurants
     restaurants.forEach((restaurant) => {
-      if (restaurant.name.toLowerCase().includes(query) || restaurant.category.toLowerCase().includes(query)) {
+      if (restaurant.name.toLowerCase().includes(query) || restaurant.category.name.toLowerCase().includes(query)) {
         results.push({
           type: 'restaurant',
           item: restaurant,
@@ -47,37 +70,37 @@ const Explore = ({ navigation }) => {
       }
 
       // Search in menu items
-      restaurant.menuItems.forEach((item) => {
+      restaurant.items.forEach((item) => {
         if (item.name.toLowerCase().includes(query) || item.description.toLowerCase().includes(query)) {
           results.push({
             type: 'menuItem',
-            item: { ...item, restaurantName: restaurant.name, restaurantId: restaurant.id },
+            item: { ...item, restaurantName: restaurant.name, restaurantId: restaurant._id },
           });
         }
       });
     });
 
     return results;
-  }, [searchQuery]);
+  }, [searchQuery, restaurants]);
 
   const popularDishes = useMemo(() => {
     const topRestaurants = restaurants.filter((r) => r.rating >= 4.5).slice(0, 3);
     return topRestaurants
       .flatMap((r) =>
-        r.menuItems.map((item) => ({
+        r.items.map((item) => ({
           ...item,
           restaurantName: r.name,
-          restaurantId: r.id,
+          restaurantId: r._id,
         }))
       )
       .slice(0, 6);
-  }, []);
+  }, [restaurants]);
 
   const quickSearchCategories = [
     {
       icon: 'utensils',
       label: 'Cuisines',
-      count: restaurantCategories.length,
+      count: categories.length,
     },
     {
       icon: 'clock-rotate-left',
@@ -92,7 +115,7 @@ const Explore = ({ navigation }) => {
     {
       icon: 'bolt',
       label: 'Fast Delivery',
-      count: restaurants.filter((r) => r.deliveryTime.split('-')[0] <= 25).length,
+      count: restaurants.filter((r) => parseInt(r.deliveryTime.split('-')[0]) <= 25).length,
     },
   ];
 
@@ -108,7 +131,7 @@ const Explore = ({ navigation }) => {
             })
           }
         >
-          <Image source={dishesBetterImages[item.item.name] || { uri: item.item.image }} style={styles.searchResultImage} />
+          <Image source={{ uri: item.item.image }} style={styles.searchResultImage} />
           <View style={styles.searchResultContent}>
             <Text style={styles.searchResultTitle}>{item.item.name}</Text>
             <Text style={styles.searchResultSubtitle}>From {item.item.restaurantName}</Text>
@@ -122,11 +145,21 @@ const Explore = ({ navigation }) => {
         <Image source={{ uri: item.item.image }} style={styles.searchResultImage} />
         <View style={styles.searchResultContent}>
           <Text style={styles.searchResultTitle}>{item.item.name}</Text>
-          <Text style={styles.searchResultSubtitle}>{item.item.category}</Text>
+          <Text style={styles.searchResultSubtitle}>{item.item.category.name}</Text>
         </View>
       </TouchableOpacity>
     );
   };
+
+  if (loading) {
+    return (
+      <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
+        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+          <ActivityIndicator size="large" color="#d3e8d6" />
+        </View>
+      </CustomStatusBar>
+    );
+  }
 
   return (
     <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
@@ -154,7 +187,7 @@ const Explore = ({ navigation }) => {
         {searchQuery ? (
           <FlatList
             data={searchResults}
-            keyExtractor={(item, index) => `${item.type}-${item.item.id}-${index}`}
+            keyExtractor={(item, index) => `${item.type}-${item.item._id}-${index}`}
             contentContainerStyle={styles.searchResults}
             renderItem={renderSearchResult}
             showsVerticalScrollIndicator={false}
@@ -188,7 +221,7 @@ const Explore = ({ navigation }) => {
                       onPress={() =>
                         navigation.navigate('MenuItemDetail', {
                           menuItem: item,
-                          restaurant: restaurants.find((r) => r.id === item.restaurantId),
+                          restaurant: restaurants.find((r) => r._id === item.restaurantId),
                         })
                       }
                     />
@@ -207,7 +240,7 @@ const Explore = ({ navigation }) => {
                     <Image source={{ uri: restaurant.image }} style={styles.topRatedImage} />
                     <View style={styles.topRatedContent}>
                       <Text style={styles.topRatedTitle}>{restaurant.name}</Text>
-                      <Text style={styles.topRatedCategory}>{restaurant.category}</Text>
+                      <Text style={styles.topRatedCategory}>{restaurant.category.name}</Text>
                       <View style={styles.ratingContainer}>
                         <Icon name="star" solid size={16} color="#d3e8d6" />
                         <Text style={styles.ratingText}>{restaurant.rating}</Text>

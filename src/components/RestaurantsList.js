@@ -1,71 +1,116 @@
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/Feather';
 import { renderStars } from '../utils/utils';
 import { getRestaurants } from '../api/restaurants';
 import { useQuery } from '@tanstack/react-query';
+import { MotiView } from 'moti';
+import { Skeleton } from 'moti/skeleton';
+
+const RestaurantSkeleton = () => (
+  <View style={styles.container}>
+    <View style={{ gap: 10, paddingHorizontal: 16 }}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Restaurants</Text>
+      </View>
+      {[1, 2, 3].map((i) => (
+        <View style={[styles.item, { backgroundColor: 'transparent', borderWidth: 0, marginBottom: 100 }]} key={i}>
+          <Skeleton colors={['#282a2f', '#282a2f']} width={100} height={100} radius={10} />
+          <View style={[styles.cardDetails, { gap: 10 }]}>
+            <Skeleton colors={['#282a2f', '#282a2f']} width={150} height={24} radius={4} />
+            <Skeleton colors={['#282a2f', '#282a2f']} width={100} height={20} radius={4} />
+            <Skeleton colors={['#282a2f', '#282a2f']} width={120} height={20} radius={4} />
+          </View>
+        </View>
+      ))}
+    </View>
+  </View>
+);
 
 const RestaurantsList = ({ selectedCategory, navigation }) => {
-  const filteredRestaurants = selectedCategory ? restaurants.filter((item) => item.category === selectedCategory) : restaurants;
+  const {
+    data: restaurants,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['restaurants'],
+    queryFn: getRestaurants,
+  });
+
+  const filteredRestaurants = selectedCategory && restaurants ? restaurants.filter((item) => item?.category?.name === selectedCategory) : restaurants;
 
   const renderItem = ({ item, index }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('RestaurantDetail', { restaurant: item })}>
-      <View style={styles.item}>
-        <Image source={{ uri: item.image }} style={styles.image} shared />
-        <View style={styles.cardDetails}>
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
-            <Text
-              style={{
-                backgroundColor: '#1b1d21',
-                color: '#d3e8d6',
-                paddingVertical: 4,
-                paddingHorizontal: 10,
-                borderRadius: 14,
-                fontSize: 10,
-                fontWeight: '600',
-                position: 'absolute',
-                top: 0,
-                right: 0,
-              }}
-            >
-              {item.category}
-            </Text>
+    <MotiView from={{ opacity: 0, translateX: -20 }} animate={{ opacity: 1, translateX: 0 }} transition={{ delay: index * 100 }}>
+      <TouchableOpacity onPress={() => navigation.navigate('RestaurantDetail', { restaurant: item })}>
+        <View style={styles.item}>
+          <Image source={{ uri: item?.image }} style={styles.image} />
+          <View style={styles.cardDetails}>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', width: '100%' }}>
+              <Text
+                style={{
+                  backgroundColor: '#1b1d21',
+                  color: '#d3e8d6',
+                  paddingVertical: 4,
+                  paddingHorizontal: 10,
+                  borderRadius: 14,
+                  fontSize: 10,
+                  fontWeight: '600',
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                }}
+              >
+                {item?.category?.name || 'Unknown'}
+              </Text>
+            </View>
+            <Text style={styles.text}>{item?.name || 'Unknown Restaurant'}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {renderStars(item?.rating || 0)}
+              <Text style={styles.subText}> {item?.rating?.toFixed(1) || '0.0'}</Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Icon name="clock" size={14} color="#7e878a" />
+              <Text style={[styles.subText, { color: '#7e878a' }]}> {item?.deliveryTime || 'N/A'}</Text>
+            </View>
           </View>
-          <Text style={styles.text}>{item.name}</Text>
-          {/* <View style={styles.cardSubDetails}> */}
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            {renderStars(item.rating)}
-            <Text style={styles.subText}> {item.rating}</Text>
-          </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Icon name="clock" size={14} color="#7e878a" />
-            <Text style={[styles.subText, { color: '#7e878a' }]}> {item.deliveryTime}</Text>
-          </View>
-          {/* </View> */}
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </MotiView>
   );
+
+  if (isLoading) {
+    return <RestaurantSkeleton />;
+  }
+
+  if (isError || !restaurants) {
+    return (
+      <View style={[styles.container, { alignItems: 'center', justifyContent: 'center' }]}>
+        <Text style={[styles.text, { color: 'red' }]}>Error loading restaurants</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <FlatList
         data={filteredRestaurants}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item?._id?.toString() || Math.random().toString()}
         numColumns={1}
-        // columnWrapperStyle={{ justifyContent: 'flex-start', flex: 1, margin: 10, gap: 10 }}
         ListHeaderComponent={
           <View style={styles.header}>
             <Text style={styles.headerText}>Restaurants</Text>
-            {/* <Text style={styles.headerSubText}>{filteredRestaurants.length}</Text> */}
           </View>
+        }
+        ListEmptyComponent={
+          <MotiView from={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} style={{ padding: 20, alignItems: 'center' }}>
+            <Text style={[styles.subText, { color: '#7e878a', textAlign: 'center' }]}>
+              {selectedCategory ? 'No restaurants found in this category' : 'No restaurants available'}
+            </Text>
+          </MotiView>
         }
         stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ gap: 10, paddingHorizontal: 16 }}
-        // scrollEnabled={false}
+        contentContainerStyle={{ gap: 10, paddingHorizontal: 16, paddingBottom: 20 }}
       />
     </View>
   );
@@ -90,6 +135,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 14,
     paddingBottom: 5,
+    zIndex: 10,
   },
   headerText: {
     backgroundColor: '#1b1d21',
@@ -100,16 +146,15 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: '#222429',
     padding: 10,
     borderRadius: 10,
-    // gap: 10,
+    gap: 10,
     borderColor: '#282a2f',
     borderWidth: 1,
   },
   text: {
-    // backgroundColor: 'blue',
     color: '#d3e8d6',
     fontSize: 18,
     fontFamily: 'Poppins_600SemiBold',
@@ -121,36 +166,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#282a2f',
     objectFit: 'contain',
   },
-  headerSubText: {
-    backgroundColor: '#d3e8d6',
-    color: '#1b1d21',
-    fontSize: 24,
-    paddingHorizontal: 8,
-    paddingVertical: 1,
-    fontWeight: 'bold',
-    borderRadius: 12,
-    marginLeft: 10,
-  },
   cardDetails: {
-    // backgroundColor: 'purple',
-    padding: 10,
-    paddingBottom: 10,
-    width: '100%',
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    gap: 10,
-    position: 'relative',
-  },
-  cardSubDetails: {
-    // backgroundColor: 'blue',
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    // padding: 5,
+    paddingVertical: 5,
+    gap: 8,
   },
   subText: {
     color: '#f7ffae',

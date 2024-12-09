@@ -1,19 +1,38 @@
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
 import CustomStatusBar from '../components/CustomStatusBar';
 import { format } from 'date-fns';
-import restaurants from '../data/restaurants';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';
 import { useCart } from '../context/CartContext';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useState, useEffect } from 'react';
+import { getRestaurants } from '../api/restaurants';
 
 const Account = () => {
-  const favoriteRestaurants = restaurants.slice(0, 4).reverse();
+  const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const { orders } = useCart();
 
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const data = await getRestaurants();
+        // For now, we'll just use the first 4 restaurants as favorites
+        // In a real app, this would be based on user preferences
+        setFavoriteRestaurants(data.slice(0, 4).reverse());
+      } catch (error) {
+        console.error('Error fetching restaurants:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRestaurants();
+  }, []);
+
   const renderFavoriteItem = (restaurant) => (
-    <TouchableOpacity key={restaurant.id} style={styles.favoriteItem} onPress={() => navigation.navigate('RestaurantDetail', { restaurant })}>
+    <TouchableOpacity key={restaurant._id} style={styles.favoriteItem} onPress={() => navigation.navigate('RestaurantDetail', { restaurant })}>
       <Image source={{ uri: restaurant.image }} style={styles.favoriteImage} />
       <Text style={styles.favoriteText} numberOfLines={1}>
         {restaurant.name}

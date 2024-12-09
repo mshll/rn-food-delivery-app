@@ -14,6 +14,8 @@ const RestaurantDetail = ({ route }) => {
   const hasItemsInCart = cartItems.length > 0;
   const isSameRestaurant = getCartRestaurant() === restaurant;
 
+  console.log(restaurant);
+
   return (
     <>
       <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21" useTopPadding={false}>

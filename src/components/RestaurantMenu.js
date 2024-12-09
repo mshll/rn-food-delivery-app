@@ -28,17 +28,17 @@ const RestaurantMenu = ({ restaurant, route }) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={restaurant.menuItems}
+        data={restaurant.items}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         numColumns={1}
-        ListHeaderComponent={
-          <View style={styles.header}>
-            {/* <Text style={styles.headerText}>Menu</Text>
-            <Text style={styles.headerSubText}>{restaurant.menuItems.length}</Text> */}
-          </View>
-        }
-        stickyHeaderIndices={[0]}
+        // ListHeaderComponent={
+        //   <View style={styles.header}>
+        //     <Text style={styles.headerText}>Menu</Text>
+        //     <Text style={styles.headerSubText}>{restaurant.menuItems.length}</Text>
+        //   </View>
+        // }
+        // stickyHeaderIndices={[0]}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ gap: 10, paddingHorizontal: 16 }}
       />
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     width: '100%',
     color: '#fff',
+    paddingTop: 10,
   },
   header: {
     backgroundColor: '#1b1d21',
