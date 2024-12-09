@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   subText: {
-    color: '#f7ffae',
+    color: '#797b89',
     fontSize: 14,
     fontFamily: 'Poppins_500Medium',
   },

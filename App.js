@@ -4,6 +4,8 @@ import AuthNavigation from './src/navigation/AuthNavigation.js/AuthNavigation';
 import BottomNavigation from './src/navigation/BottomNavigation/BottomNavigation';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UserProvider, useUser } from './src/context/UserContext';
+import { useEffect } from 'react';
+import { getToken } from './src/api/storage';
 import {
   useFonts,
   Poppins_400Regular,
@@ -16,7 +18,16 @@ import {
 const queryClient = new QueryClient();
 
 const Navigation = () => {
-  const { userAuthenticated } = useUser();
+  const { userAuthenticated, setUserAuthenticated } = useUser();
+
+  const checkToken = async () => {
+    const token = await getToken();
+    if (token) setUserAuthenticated(true);
+  };
+
+  useEffect(() => {
+    checkToken();
+  }, [userAuthenticated]);
 
   return <>{userAuthenticated ? <BottomNavigation /> : <AuthNavigation />}</>;
 };

@@ -1,35 +1,33 @@
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import CustomStatusBar from '../components/CustomStatusBar';
 import { format } from 'date-fns';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';
 import { useCart } from '../context/CartContext';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useState, useEffect } from 'react';
 import { getRestaurants } from '../api/restaurants';
+import { getProfile } from '../api/auth';
+import instance from '../api';
+import { useQuery } from '@tanstack/react-query';
 
 const Account = () => {
-  const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
-  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const { orders } = useCart();
 
-  useEffect(() => {
-    const fetchRestaurants = async () => {
-      try {
-        const data = await getRestaurants();
-        // For now, we'll just use the first 4 restaurants as favorites
-        // In a real app, this would be based on user preferences
-        setFavoriteRestaurants(data.slice(0, 4).reverse());
-      } catch (error) {
-        console.error('Error fetching restaurants:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const { data: userProfile, isLoading: isProfileLoading } = useQuery({
+    queryKey: ['profile'],
+    queryFn: getProfile,
+  });
 
-    fetchRestaurants();
-  }, []);
+  const { data: restaurants, isLoading: isRestaurantsLoading } = useQuery({
+    queryKey: ['restaurants'],
+    queryFn: getRestaurants,
+  });
+
+  // get the first 4 restaurants as favorites
+  const favoriteRestaurants = restaurants?.slice(0, 4).reverse() || [];
+
+  console.log('USER-PROFILE: ', userProfile);
 
   const renderFavoriteItem = (restaurant) => (
     <TouchableOpacity key={restaurant._id} style={styles.favoriteItem} onPress={() => navigation.navigate('RestaurantDetail', { restaurant })}>
@@ -63,15 +61,28 @@ const Account = () => {
     </TouchableOpacity>
   );
 
+  if (isProfileLoading || isRestaurantsLoading) {
+    return (
+      <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
+        <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+          <ActivityIndicator size="large" color="#d3e8d6" />
+        </View>
+      </CustomStatusBar>
+    );
+  }
+
   return (
     <CustomStatusBar statusBgColor="#d3e8d6" bgColor="#1b1d21">
       <LinearGradient colors={['#d3e8d6', '#1b1d21']} locations={[0.5, 0.5]} style={{ flex: 1 }}>
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
           <View style={{ flex: 1, backgroundColor: '#1b1d21' }}>
             <View style={styles.profileSection}>
-              <Image source={{ uri: 'https://github.com/mshll.png' }} style={styles.avatar} />
-              <Text style={styles.username}>Meshal Almutairi</Text>
-              <Text style={styles.profileSubText}>meshal@me.com</Text>
+              <View style={[styles.avatar, styles.fallbackAvatar]}>
+                <Icon name="user-astronaut" size={40} color="#4c5b4a" />
+                {userProfile?.image && <Image source={{ uri: userProfile.image }} style={[StyleSheet.absoluteFill, styles.avatarImage]} />}
+              </View>
+              <Text style={styles.username}>{userProfile?.username || 'Loading...'}</Text>
+              <Text style={styles.profileSubText}>{userProfile?.username + '@zestzoom.com'}</Text>
             </View>
           </View>
 
@@ -264,5 +275,13 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: 12,
     fontFamily: 'Poppins_500Medium',
+  },
+  fallbackAvatar: {
+    backgroundColor: '#c2d6c5',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatarImage: {
+    borderRadius: 60,
   },
 });

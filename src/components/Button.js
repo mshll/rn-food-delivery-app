@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, Pressable } from 'react-native';
 
-export default function Button({ onPress, title, bgColor = '#f7ffae', color = '#1b1d21', children }) {
+export default function Button({ onPress, title, bgColor = '#d3e8d6', color = '#1b1d21', children }) {
   return (
     <Pressable style={({ pressed }) => [styles.button, { backgroundColor: bgColor }, pressed && styles.pressed]} onPress={onPress}>
       {children ? children : <Text style={[styles.text, { color }]}>{title}</Text>}

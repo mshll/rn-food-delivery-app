@@ -118,10 +118,10 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   emptySpace: {
-    flex: 0.3,
+    flex: 0.4,
   },
   contentContainer: {
-    flex: 0.7,
+    flex: 0.6,
   },
   contentWrapper: {
     flex: 1,
@@ -129,14 +129,14 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     alignSelf: 'center',
-    marginBottom: -150,
+    marginBottom: -175,
     zIndex: 2,
   },
   detailsCard: {
     backgroundColor: '#1b1d21',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    minHeight: height * 0.6,
+    minHeight: height * 0.55,
     zIndex: 1,
   },
   content: {
@@ -146,16 +146,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   detailsContent: {
-    marginTop: 160,
+    marginTop: 170,
   },
   heading: {
-    color: '#f9ffb7',
+    color: '#d3e8d6',
     fontSize: 24,
     fontFamily: 'Poppins_600SemiBold',
     marginBottom: 10,
   },
   description: {
-    color: '#d3e8d6',
+    color: '#797b89',
     fontSize: 14,
     marginTop: 16,
   },
