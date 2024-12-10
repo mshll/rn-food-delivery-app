@@ -39,7 +39,17 @@ export default function HomeNavigation() {
         options={{ headerShown: true, absolute: false, backgroundColor: '#d3e8d6', showLogo: true }}
       />
       <Stack.Screen name="RestaurantDetail" component={RestaurantDetail} options={{ absolute: true }} />
-      <Stack.Screen name="MenuItemDetail" component={MenuItemDetail} options={{ presentation: 'transparentModal', headerShown: false }} />
+      <Stack.Screen
+        name="MenuItemDetail"
+        component={MenuItemDetail}
+        options={{
+          presentation: 'modal',
+          backgroundColor: '#1b1d21',
+          headerShown: false,
+          animation: 'slide_from_bottom',
+          cardStyle: { backgroundColor: '#1b1d21' },
+        }}
+      />
       <Stack.Screen name="Cart" component={Cart} options={{ presentation: 'modal', backgroundColor: '#1b1d21', headerShown: false }} />
       <Stack.Screen
         name="OrderConfirmation"

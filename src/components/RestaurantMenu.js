@@ -1,135 +1,208 @@
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { MotiView } from 'moti';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useNavigation } from '@react-navigation/native';
 import dishesBetterImages from '../data/dishesBetterImages';
 
-const RestaurantMenu = ({ restaurant, route }) => {
-  const navigation = useNavigation();
-
-  const renderItem = ({ item, index }) => (
-    <TouchableOpacity onPress={() => navigation.navigate('MenuItemDetail', { menuItem: item, restaurant })}>
-      <View style={styles.itemContainer}>
-        <Image source={dishesBetterImages[item.name] || { uri: item.image }} style={styles.image} />
-        <View style={styles.item}>
-          <View style={{ flexDirection: 'row', flex: 1, alignItems: 'center' }}>
-            <View style={styles.cardDetails}>
-              <Text style={styles.text}>{item.name}</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={styles.subText}>{item.price} KWD</Text>
-              </View>
-            </View>
-            <Icon name="chevron-right" size={14} color="#7e878a" style={{ marginHorizontal: 10 }} />
-          </View>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
+const MenuItem = ({ item, onPress, index }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={restaurant.items}
-        renderItem={renderItem}
-        keyExtractor={(item) => item._id}
-        numColumns={1}
-        // ListHeaderComponent={
-        //   <View style={styles.header}>
-        //     <Text style={styles.headerText}>Menu</Text>
-        //     <Text style={styles.headerSubText}>{restaurant.menuItems.length}</Text>
-        //   </View>
-        // }
-        // stickyHeaderIndices={[0]}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ gap: 10, paddingHorizontal: 16 }}
-      />
-    </View>
+    <MotiView
+      from={{ opacity: 0, translateX: -20 }}
+      animate={{ opacity: 1, translateX: 0 }}
+      transition={{
+        type: 'timing',
+        duration: 500,
+        delay: index * 100,
+      }}
+    >
+      <TouchableOpacity style={styles.menuItem} onPress={onPress}>
+        <View style={styles.imageWrapper}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={dishesBetterImages[item.name] || { uri: item.image }}
+              style={styles.image}
+              resizeMode="contain"
+              onLoad={() => setImageLoaded(true)}
+            />
+          </View>
+          {item.isPopular && (
+            <View style={styles.popularBadge}>
+              <Icon name="fire" size={10} color="#1b1d21" solid style={{ marginRight: 4 }} />
+              <Text style={styles.popularText}>Popular</Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.content}>
+          <View style={styles.header}>
+            <Text style={styles.name} numberOfLines={1}>
+              {item.name}
+            </Text>
+            <View style={styles.priceBadge}>
+              <Text style={styles.price}>{item.price.toFixed(2)} KWD</Text>
+            </View>
+          </View>
+
+          <Text style={styles.description} numberOfLines={2}>
+            {item.description || 'A delicious dish prepared with the finest ingredients and served with love.'}
+          </Text>
+
+          <View style={styles.footer}>
+            {item.isVegetarian && (
+              <View style={styles.tagBadge}>
+                <Icon name="leaf" size={10} color="#4CAF50" solid style={{ marginRight: 4 }} />
+                <Text style={[styles.tagText, { color: '#4CAF50' }]}>Vegetarian</Text>
+              </View>
+            )}
+            {item.isSpicy && (
+              <View style={styles.tagBadge}>
+                <Icon name="pepper-hot" size={10} color="#f44336" solid style={{ marginRight: 4 }} />
+                <Text style={[styles.tagText, { color: '#f44336' }]}>Spicy</Text>
+              </View>
+            )}
+            <View style={styles.prepTime}>
+              <Icon name="clock" size={10} color="#797b89" style={{ marginRight: 4 }} />
+              <Text style={styles.prepTimeText}>{Math.floor(Math.random() * 10) + 10} mins</Text>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    </MotiView>
   );
 };
 
-export default RestaurantMenu;
+const RestaurantMenu = ({ restaurant }) => {
+  const navigation = useNavigation();
+
+  // Add random properties to menu items
+  const enhancedMenu = restaurant.items.map((item) => ({
+    ...item,
+    isPopular: Math.random() > 0.7,
+    isVegetarian: Math.random() > 0.7,
+    isSpicy: Math.random() > 0.7,
+  }));
+
+  return (
+    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+      {enhancedMenu.map((item, index) => (
+        <MenuItem key={item._id} item={item} onPress={() => navigation.navigate('MenuItemDetail', { menuItem: item, restaurant })} index={index} />
+      ))}
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1b1d21',
-    justifyContent: 'flex-start',
-    alignItems: 'stretch',
-    width: '100%',
-    color: '#fff',
-    paddingTop: 10,
   },
-  header: {
-    backgroundColor: '#1b1d21',
-    color: '#d3e8d6',
+  contentContainer: {
+    padding: 16,
+    gap: 8,
+  },
+  menuItem: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingVertical: 5,
-  },
-  headerText: {
-    backgroundColor: '#1b1d21',
-    color: '#d3e8d6',
-    fontSize: 28,
-    fontWeight: 'bold',
-  },
-  itemContainer: {
-    marginVertical: 8,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 16,
-  },
-  item: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
     backgroundColor: '#222429',
-    padding: 10,
-    paddingLeft: 52,
-    marginLeft: -50,
-    borderRadius: 10,
-    borderColor: '#282a2f',
+    borderRadius: 12,
     borderWidth: 1,
-    minHeight: 120,
+    borderColor: '#282a2f',
+    padding: 12,
+    gap: 12,
   },
-  text: {
-    color: '#d3e8d6',
-    fontSize: 16,
-    fontFamily: 'Poppins_600SemiBold',
+  imageWrapper: {
+    width: 85,
+    height: 85,
+  },
+  imageContainer: {
+    width: '100%',
+    height: '100%',
   },
   image: {
-    height: 100,
-    width: 100,
-    zIndex: 1,
-  },
-  headerSubText: {
-    backgroundColor: '#d3e8d6',
-    color: '#1b1d21',
-    paddingHorizontal: 8,
-    paddingVertical: 1,
-    fontWeight: 'bold',
-    fontSize: 20,
-    borderRadius: 12,
-    marginLeft: 10,
-  },
-  cardDetails: {
-    padding: 10,
-    paddingLeft: 5,
-    paddingBottom: 10,
     width: '100%',
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    gap: 10,
+    height: '100%',
+    borderRadius: 10,
   },
-  cardSubDetails: {
-    width: '100%',
+  popularBadge: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: '#f9ffb7',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
   },
-  subText: {
-    color: '#797b89',
+  popularText: {
+    color: '#1b1d21',
+    fontSize: 8,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'space-between',
+    gap: 4,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  name: {
     fontSize: 14,
+    color: '#d3e8d6',
+    fontFamily: 'Poppins_600SemiBold',
+    flex: 1,
+  },
+  priceBadge: {
+    backgroundColor: '#1b1d21',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8,
+  },
+  price: {
+    color: '#f9ffb7',
+    fontSize: 12,
+    fontFamily: 'Poppins_600SemiBold',
+  },
+  description: {
+    color: '#797b89',
+    fontSize: 11,
+    fontFamily: 'Poppins_400Regular',
+    lineHeight: 14,
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 4,
+    marginTop: 2,
+  },
+  tagBadge: {
+    backgroundColor: '#1b1d21',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  tagText: {
+    fontSize: 9,
+    fontFamily: 'Poppins_500Medium',
+  },
+  prepTime: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 'auto',
+  },
+  prepTimeText: {
+    color: '#797b89',
+    fontSize: 9,
     fontFamily: 'Poppins_500Medium',
   },
 });
+
+export default RestaurantMenu;

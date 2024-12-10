@@ -61,12 +61,11 @@ const Categories = ({ setSelectedCategory, selectedCategory }) => {
   const AnimatedContainer = useMemo(
     () => (
       <MotiView
-        from={{ translateY: -100 }}
-        animate={{ translateY: 0 }}
+        from={{ opacity: 0, translateY: -50 }}
+        animate={{ opacity: 1, translateY: 0 }}
         transition={{
           type: 'timing',
           duration: 300,
-          delay: 0,
         }}
         onDidAnimate={(key, finished) => {
           if (key === 'translateY' && finished) {
