@@ -57,6 +57,8 @@ const RestaurantCard = ({ restaurant, onPress, index }) => {
             </View>
           </View>
 
+          <Text style={styles.category}>{restaurant.category?.name}</Text>
+
           <View style={styles.tagsRow}>
             {restaurant.categories?.slice(0, 2).map((category, idx) => (
               <View key={idx} style={styles.tag}>
@@ -185,19 +187,21 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 12,
-    gap: 8,
+    gap: 6,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    marginBottom: 2,
   },
   name: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#d3e8d6',
     fontFamily: 'Poppins_600SemiBold',
     flex: 1,
     marginRight: 8,
+    lineHeight: 24,
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -206,6 +210,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
+    marginTop: 2,
   },
   rating: {
     fontSize: 12,
@@ -215,6 +220,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 4,
+    marginBottom: 2,
   },
   tag: {
     backgroundColor: '#1b1d21',
@@ -246,6 +252,13 @@ const styles = StyleSheet.create({
     borderRadius: 1.5,
     backgroundColor: '#797b89',
     marginHorizontal: 8,
+  },
+  category: {
+    fontSize: 14,
+    color: '#797b89',
+    fontFamily: 'Poppins_500Medium',
+    marginBottom: 2,
+    lineHeight: 20,
   },
 });
 

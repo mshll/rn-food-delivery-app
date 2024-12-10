@@ -59,8 +59,6 @@ const Account = () => {
   // get the first 4 restaurants as favorites
   const favoriteRestaurants = restaurants?.slice(0, 4).reverse() || [];
 
-  console.log('USER-PROFILE: ', userProfile);
-
   const renderFavoriteItem = (restaurant) => (
     <TouchableOpacity key={restaurant._id} style={styles.favoriteItem} onPress={() => navigation.navigate('RestaurantDetail', { restaurant })}>
       <Image source={{ uri: restaurant.image }} style={styles.favoriteImage} />
@@ -142,7 +140,12 @@ const Account = () => {
             <View style={styles.profileSection}>
               <View style={[styles.avatar, styles.fallbackAvatar]}>
                 <Icon name="user-astronaut" size={40} color="#4c5b4a" />
-                {userProfile?.image && <Image source={{ uri: userProfile.image }} style={[StyleSheet.absoluteFill, styles.avatarImage]} />}
+                {userProfile?.image && (
+                  <Image
+                    source={{ uri: instance.defaults.baseURL + '/' + userProfile.image }}
+                    style={[StyleSheet.absoluteFill, styles.avatarImage]}
+                  />
+                )}
               </View>
               <Text style={styles.username}>{userProfile?.username || 'Loading...'}</Text>
               <Text style={styles.profileSubText}>{userProfile?.username + '@zestzoom.com'}</Text>
@@ -245,8 +248,8 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 40,
     marginBottom: 8,
-    borderWidth: 2,
-    borderColor: '#d3e8d6',
+    borderWidth: 1,
+    borderColor: '#797b89',
   },
   favoriteText: {
     color: '#d3e8d6',

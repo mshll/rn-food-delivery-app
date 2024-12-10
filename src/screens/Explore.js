@@ -450,8 +450,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   popularDishesWrapper: {
-    height: 200,
-    overflow: 'hidden',
+    marginBottom: 20,
   },
   popularDishesScroll: {
     paddingHorizontal: 16,
@@ -503,7 +502,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     flexDirection: 'row',
-    height: 100,
+    minHeight: 100,
     borderWidth: 1,
     borderColor: '#282a2f',
   },

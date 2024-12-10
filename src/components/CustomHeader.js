@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useCart } from '../context/CartContext';
+import { useUser } from '../context/UserContext';
+import { deleteToken } from '../api/storage';
 
 const CustomHeader = ({
   navigation,
@@ -17,12 +19,34 @@ const CustomHeader = ({
 }) => {
   const insets = useSafeAreaInsets();
   const { cartItems } = useCart();
+  const { setUserAuthenticated } = useUser();
   const isCartScreen = route?.name === 'Cart';
   const isExploreScreen = route?.name === 'Explore';
   const isAccountScreen = route?.name === 'Account';
   const isHomeScreen = route?.name === 'Home';
 
   const cartItemsCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+  const handleLogout = async () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          onPress: async () => {
+            await deleteToken();
+            setUserAuthenticated(false);
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   const renderLeftButton = () => {
     if (navigation.canGoBack() && !isHomeScreen && !isExploreScreen && !isAccountScreen) {
@@ -41,6 +65,11 @@ const CustomHeader = ({
         {isExploreScreen && (
           <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Map')}>
             <Icon name="map-location-dot" size={15} color="#d3e8d6" />
+          </TouchableOpacity>
+        )}
+        {isAccountScreen && (
+          <TouchableOpacity style={styles.iconButton} onPress={handleLogout}>
+            <Icon name="right-from-bracket" size={15} color="#d3e8d6" />
           </TouchableOpacity>
         )}
         {!isCartScreen && (
